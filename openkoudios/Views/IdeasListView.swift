@@ -6,6 +6,7 @@ struct IdeasListView: View {
 
     @State private var activeFilter: IdeaFilter = .all
     @State private var deletingIdea: Idea?
+    @State private var presentedIdea: PresentedIdea?
 
     private var visibleIdeas: [Idea] {
         store.ideas
@@ -39,12 +40,13 @@ struct IdeasListView: View {
                 } else {
                     LazyVStack(spacing: 14) {
                         ForEach(visibleIdeas) { idea in
-                            NavigationLink(value: idea.id) {
-                                IdeaCardView(idea: idea) {
-                                    deletingIdea = idea
-                                }
+                            IdeaCardView(idea: idea) {
+                                deletingIdea = idea
                             }
-                            .buttonStyle(.plain)
+                            .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .onTapGesture {
+                                presentedIdea = PresentedIdea(id: idea.id)
+                            }
                         }
                     }
                 }
@@ -53,8 +55,10 @@ struct IdeasListView: View {
         }
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("Ideas")
-        .navigationDestination(for: Idea.ID.self) { id in
-            IdeaDetailView(store: store, ideaID: id)
+        .sheet(item: $presentedIdea) { presentedIdea in
+            NavigationStack {
+                IdeaDetailView(store: store, ideaID: presentedIdea.id)
+            }
         }
         .alert("Borrar esta idea?", isPresented: Binding(get: { deletingIdea != nil }, set: { if !$0 { deletingIdea = nil } })) {
             Button("Borrar", role: .destructive) {
@@ -76,6 +80,10 @@ struct IdeasListView: View {
         if left.status != .discarded && right.status == .discarded { return true }
         return left.createdAt > right.createdAt
     }
+}
+
+private struct PresentedIdea: Identifiable {
+    let id: Idea.ID
 }
 
 enum IdeaFilter: Hashable, CaseIterable, Identifiable {

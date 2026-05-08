@@ -40,6 +40,19 @@ struct IdeaDetailView: View {
         .navigationTitle(isEditing ? "Editar idea" : "Detalle")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 32, height: 32)
+                        .background(.thinMaterial, in: Circle())
+                }
+                .accessibilityLabel("Cerrar")
+            }
+
             if idea != nil && !isEditing {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button { isEditing = true; draft = idea.map(IdeaDraft.init) } label: {

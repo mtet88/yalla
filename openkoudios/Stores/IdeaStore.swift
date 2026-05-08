@@ -71,6 +71,7 @@ final class IdeaStore {
     private func createIdea(rawText: String, link: String?) -> Idea {
         let createdAt = Date()
         let trimmedText = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Classification is best-effort: saving must never depend on enrichment quality.
         let classification = IdeaClassifier.classify(trimmedText)
 
         return Idea(

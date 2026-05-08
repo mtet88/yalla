@@ -20,6 +20,7 @@ enum IdeaExpiration {
 
             changed = true
             var expired = idea
+            // Expired plans stay in the archive; they are never deleted automatically.
             expired.status = .discarded
             expired.discardedReason = .expired
             expired.updatedAt = now

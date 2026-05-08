@@ -26,20 +26,21 @@ struct AppRootView: View {
                 .tabItem { Label("Cuenta", systemImage: "person") }
                 .tag(AppTab.account)
             }
+            .tint(.green)
 
             if selectedTab == .vamos || selectedTab == .ideas {
                 Button {
                     showingSave = true
                 } label: {
                     Image(systemName: "plus")
-                        .font(.system(size: 30, weight: .light))
+                        .font(.system(size: 28, weight: .regular))
                         .foregroundStyle(.white)
-                        .frame(width: 68, height: 68)
+                        .frame(width: 60, height: 60)
                         .background(.green, in: Circle())
-                        .shadow(color: .green.opacity(0.35), radius: 18, y: 8)
+                        .shadow(color: .green.opacity(0.28), radius: 16, y: 8)
                 }
-                .padding(.trailing, 24)
-                .padding(.bottom, 72)
+                .padding(.trailing, 22)
+                .padding(.bottom, 78)
                 .accessibilityLabel("Guardar idea")
             }
         }

@@ -12,9 +12,6 @@ struct SaveIdeaView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Guardar idea")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.orange)
                     Text("Tira cualquier plan aqui.")
                         .font(.largeTitle.weight(.black))
                     Text("Puede ser un restaurante, evento, sitio o algo como jugar Nintendo Switch en casa.")
@@ -63,7 +60,7 @@ struct SaveIdeaView: View {
                         .padding()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.black)
+                .tint(.green)
                 .clipShape(Capsule())
             }
             .padding(24)
@@ -74,8 +71,17 @@ struct SaveIdeaView: View {
         .navigationTitle("Guardar")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancelar") { dismiss() }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 32, height: 32)
+                        .background(.thinMaterial, in: Circle())
+                }
+                .accessibilityLabel("Cerrar")
             }
         }
     }

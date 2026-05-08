@@ -69,6 +69,7 @@ enum IdeaScoring {
             return false
         }
 
+        // Product rule: repeatable plans need a cooldown before they can reappear.
         if idea.status == .repeatable {
             guard let anchor = idea.lastRepeatedAt ?? idea.completedAt else { return true }
             return daysBetween(anchor) >= 15
