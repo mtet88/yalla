@@ -251,7 +251,7 @@ La captura nunca debe bloquearse porque la app no entendio una fecha, categoria,
 
 Al crear una idea, reglas simples proponen categoria y condiciones ideales. Esas sugerencias aparecen en edicion, pero el usuario puede cambiarlas. La app no debe reclasificar automaticamente una idea editada salvo que exista una accion explicita de reclasificar.
 
-Tocar una idea abre primero el detalle read-only. Desde ese detalle se puede entrar al formulario de edicion, compartir, borrar definitivamente o cambiar estado.
+Tocar una idea abre primero el detalle read-only en un modal nativo. Desde ese detalle se puede cerrar con `X`, entrar al formulario de edicion, compartir, borrar definitivamente o cambiar estado.
 
 ## Sugerencias
 

@@ -66,6 +66,18 @@ Run tests from CLI:
 xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test
 ```
 
+Run only unit tests:
+
+```bash
+xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test
+```
+
+Run only UI tests:
+
+```bash
+xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test
+```
+
 If `xcodebuild` reports that the active developer directory is CommandLineTools, select a full Xcode install first:
 
 ```bash
@@ -77,4 +89,5 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 - This is an Xcode app project, not a Swift Package.
 - The `.xcodeproj` uses file-system-synchronized root groups, so adding Swift files under the target folders should not require manually editing `project.pbxproj`.
 - Info.plist is generated from build settings.
-- CLI builds were not verified in this environment while the active developer directory was `/Library/Developer/CommandLineTools`.
+- Current local Xcode path is `/Applications/Xcode-26.4.1.app/Contents/Developer`.
+- `xcodebuild -list` works. Full and unit-only test commands currently fail during Simulator app launch with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"`, after building far enough to attempt launch.

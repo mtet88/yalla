@@ -43,8 +43,9 @@
 
 ## UI And Copy
 - Build for iPhone first and keep iPad functional; preserve native SwiftUI navigation conventions unless product docs explicitly require custom behavior.
-- Main tabs are `Vamos!`, `Ideas`, and `Cuenta`. `Guardar idea` is a focused flow opened from a global `+` action.
-- Hide or avoid global navigation chrome during focused save/detail flows when it creates accidental exits or distraction.
+- Main tabs are `Vamos!`, `Ideas`, and `Cuenta`. `Guardar idea` is a focused sheet opened from a floating global `+` action on `Vamos!` and `Ideas`.
+- Idea detail opens as a modal sheet from suggestion/list cards, not as a push. The modal owns its `NavigationStack` and has an explicit `X` close action.
+- Hide or avoid global navigation chrome during focused save/detail flows when it creates accidental exits or distraction. `SaveIdeaView` closes with `X`, not a `Cancelar` text button.
 - UI copy is Spanish. Existing source may include non-ASCII Spanish such as `Mañana`; otherwise prefer ASCII if editing nearby ASCII-only text.
 
 ## Commands
@@ -52,7 +53,11 @@
 - List schemes/targets: `xcodebuild -list -project openkoudios.xcodeproj`.
 - Build from CLI: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' build`.
 - Run all tests from CLI: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test`.
+- Run unit tests only: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test`.
+- Run UI tests only: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test`.
 - If `xcodebuild` reports the active developer directory is CommandLineTools, select a full Xcode install first, e.g. `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`.
 
 ## Current Verification State
-- `xcodebuild` commands could not be verified in this environment because the active developer directory is `/Library/Developer/CommandLineTools`, which cannot build Xcode projects.
+- Active developer directory is currently `/Applications/Xcode-26.4.1.app/Contents/Developer` and `xcodebuild -list` works.
+- Full tests and unit-only tests currently fail during Simulator launch with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"` after building far enough to attempt launching `matom.openkoudios`.
+- `git diff --check` passes for the current changes.

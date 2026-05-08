@@ -33,7 +33,7 @@ Los tabs usan `TabView` nativo. El tab activo debe ser claro, usando las convenc
 +
 ```
 
-El FAB abre el flujo `Guardar idea`.
+El FAB abre el flujo `Guardar idea` como sheet.
 
 Reglas:
 
@@ -74,7 +74,7 @@ Ayudar al usuario a decidir que hacer en una fecha o momento especifico.
 └─────────────────────────────┘
 ```
 
-Cuando hay sugerencias, el area central muestra un carrusel horizontal de tarjetas visuales. Cada tarjeta es tappable completa; el detalle se abre al tocar cualquier zona que no sea la accion de compartir.
+Cuando hay sugerencias, el area central muestra un carrusel horizontal de tarjetas visuales. Cada tarjeta es tappable completa; el detalle se abre en modal al tocar cualquier zona que no sea la accion de compartir.
 
 ### Selector Fecha
 
@@ -148,7 +148,7 @@ Capturar una idea con minima friccion.
 
 ```txt
 ┌─────────────────────────────┐
-│ Cancelar        Guardar idea│
+│                  [ X ]      │
 ├─────────────────────────────┤
 │ Tira cualquier plan aqui.   │
 │                             │
@@ -169,7 +169,7 @@ Capturar una idea con minima friccion.
 
 ### Despues de Guardar
 
-Mostrar confirmacion editable o navegar a un formulario de detalles.
+Al guardar, cerrar la sheet y dejar la idea disponible en `Vamos!` e `Ideas`. Los detalles se editan desde el modal de detalle.
 
 ```txt
 ┌─────────────────────────────┐
@@ -230,7 +230,7 @@ Revisar y mantener las ideas guardadas.
 └─────────────────────────────┘
 ```
 
-La tarjeta completa abre el detalle. La accion de borrar debe pedir confirmacion y no disparar navegacion.
+La tarjeta completa abre el detalle en modal. La accion de borrar debe pedir confirmacion y no disparar navegacion.
 
 ### Filtros
 
@@ -259,7 +259,7 @@ Ver una idea sin entrar directamente al formulario de edicion.
 
 ```txt
 ┌─────────────────────────────┐
-│ < Ideas              Editar │
+│ [X] Detalle          Editar │
 ├─────────────────────────────┤
 │ Picnic en el parque         │
 │ Texto original              │
@@ -278,7 +278,7 @@ Ver una idea sin entrar directamente al formulario de edicion.
 └─────────────────────────────┘
 ```
 
-El detalle es read-only por defecto. Editar abre formulario o sheet.
+El detalle es read-only por defecto y se presenta como modal. Editar abre el formulario dentro del mismo modal.
 
 ## Screen: Cuenta
 

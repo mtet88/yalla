@@ -128,9 +128,9 @@ Ideas
 Cuenta
 ```
 
-`Guardar idea` no es tab principal; se abre desde un `+` global visible en `Vamos!` e `Ideas`.
+`Guardar idea` no es tab principal; se abre como sheet desde un `+` flotante global visible en `Vamos!` e `Ideas`.
 
-Detalle de idea se abre con `NavigationStack` desde sugerencias o tarjetas de lista.
+Detalle de idea se presenta como sheet desde sugerencias o tarjetas de lista. La sheet contiene su propio `NavigationStack` para toolbar, cierre con `X`, edicion y acciones internas.
 
 ## Tipos Core
 
@@ -289,6 +289,20 @@ repeatable requiere 15 dias
 expiracion marca discarded sin borrar
 ```
 
+Cobertura unitaria actual en `openkoudiosTests/openkoudiosTests.swift`:
+
+```txt
+clasificacion basica e insensible a acentos
+normalizacion de links
+scoring excluye done/discarded
+repeatable requiere cooldown de 15 dias
+maximo 5 sugerencias
+fecha especifica aplica solo al dia seleccionado
+expiracion descarta sin borrar
+IdeaStore persiste y recarga con UserDefaults aislado
+IdeaStore marca descartes manuales
+```
+
 UI tests deben cubrir flujos criticos:
 
 ```txt
@@ -324,8 +338,37 @@ Tests:
 xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test
 ```
 
+Solo unit tests:
+
+```bash
+xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test
+```
+
+Solo UI tests:
+
+```bash
+xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test
+```
+
 Si `xcodebuild` usa CommandLineTools, seleccionar Xcode completo:
 
 ```bash
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
+
+## Current Verification State
+
+`xcodebuild -list` works in the current environment with Xcode at:
+
+```txt
+/Applications/Xcode-26.4.1.app/Contents/Developer
+```
+
+Full tests and unit-only tests currently build far enough to start launching the simulator app, but fail during Simulator launch with:
+
+```txt
+NSMachErrorDomain Code=-308 "(ipc/mig) server died"
+Failed to launch app with identifier: matom.openkoudios
+```
+
+This appears to be a Simulator launch/runtime issue rather than a documented product logic failure. `git diff --check` passes.

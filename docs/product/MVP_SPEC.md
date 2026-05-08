@@ -68,9 +68,9 @@ Cuenta
 Guardar idea
 ```
 
-En iOS, `Vamos!`, `Ideas` y `Cuenta` viven en `TabView`. `Guardar idea` vive como accion global `+`, visible en `Vamos!` e `Ideas`, y se presenta como flujo enfocado en sheet o navigation stack.
+En iOS, `Vamos!`, `Ideas` y `Cuenta` viven en `TabView`. `Guardar idea` vive como accion global `+` flotante, visible en `Vamos!` e `Ideas`, y se presenta como sheet enfocada.
 
-En flujos enfocados como `Guardar idea` y detalle de idea, se debe minimizar la navegacion global para evitar distracciones o salidas accidentales.
+En flujos enfocados como `Guardar idea` y detalle de idea, se debe minimizar la navegacion global para evitar distracciones o salidas accidentales. Ambos flujos deben tener un cierre explicito con `X`.
 
 ## Pantalla: Vamos!
 
@@ -130,7 +130,7 @@ Fecha si aplica
 Distancia aproximada si hay ubicacion futura
 ```
 
-La tarjeta completa debe ser tappable y abrir el detalle de la idea. El boton de compartir vive como accion secundaria dentro de la tarjeta y no debe disparar navegacion al detalle.
+La tarjeta completa debe ser tappable y abrir el detalle de la idea en modal. El boton de compartir vive como accion secundaria dentro de la tarjeta y no debe disparar la presentacion del detalle.
 
 ## Pantalla: Guardar Idea
 
@@ -158,7 +158,7 @@ Al guardar:
 ```txt
 La idea se crea inmediatamente.
 La app intenta clasificarla con reglas simples.
-La app muestra confirmacion o permite completar detalles.
+La app cierra la sheet al guardar y la idea queda disponible en `Vamos!` e `Ideas`.
 ```
 
 ### Confirmacion Editable
@@ -226,13 +226,13 @@ Link si aplica
 Boton Borrar
 ```
 
-La tarjeta completa abre el detalle de la idea. No debe necesitar un boton `Ver`. El borrado debe evitar navegacion accidental y pedir confirmacion.
+La tarjeta completa abre el detalle de la idea en modal. No debe necesitar un boton `Ver`. El borrado debe evitar navegacion accidental y pedir confirmacion.
 
 ## Pantalla: Detalle de Idea
 
 ### Objetivo
 
-Ver una idea sin entrar directamente al formulario de edicion. Desde el detalle, el usuario puede editar, compartir, borrar o cambiar estado.
+Ver una idea en modal sin entrar directamente al formulario de edicion. Desde el detalle, el usuario puede editar, compartir, borrar, cambiar estado o cerrar con `X`.
 
 ### Campos en Detalle
 
@@ -304,7 +304,7 @@ El resultado debe ser deterministico para el mismo input.
 2. Una persona puede guardar una idea con solo texto.
 3. Una persona puede guardar una idea con texto y link opcional.
 4. La idea aparece en `Ideas` despues de guardarse.
-5. La idea puede abrirse en detalle.
+5. La idea puede abrirse en detalle modal.
 6. La idea puede editarse sin requerir campos extra.
 7. La idea puede cambiar de estado.
 8. `done` y `discarded` no aparecen en sugerencias.
