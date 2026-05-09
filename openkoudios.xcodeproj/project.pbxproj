@@ -27,6 +27,7 @@
 		8722A3AC2FABDD0F000B5CD9 /* openkoudios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openkoudios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8722A3B92FABDD12000B5CD9 /* openkoudiosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = openkoudiosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8722A3C32FABDD12000B5CD9 /* openkoudiosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = openkoudiosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		878BE02D2FAFC30600F1F418 /* openkoudiosTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = openkoudiosTests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		8722A3A32FABDD0F000B5CD9 = {
 			isa = PBXGroup;
 			children = (
+				878BE02D2FAFC30600F1F418 /* openkoudiosTests.xctestplan */,
 				8722A3AE2FABDD0F000B5CD9 /* openkoudios */,
 				8722A3BC2FABDD12000B5CD9 /* openkoudiosTests */,
 				8722A3C62FABDD12000B5CD9 /* openkoudiosUITests */,

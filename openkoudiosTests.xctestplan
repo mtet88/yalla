@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "8ED904F3-EA3D-4EA3-BD10-9E84912D2A2F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:openkoudios.xcodeproj",
+        "identifier" : "8722A3B82FABDD12000B5CD9",
+        "name" : "openkoudiosTests"
+      }
+    }
+  ],
+  "version" : 1
+}
