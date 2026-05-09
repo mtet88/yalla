@@ -55,7 +55,12 @@ struct IdeaDetailView: View {
 
             if idea != nil && !isEditing {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button { isEditing = true; draft = idea.map(IdeaDraft.init) } label: {
+                    Button {
+                        if let idea {
+                            draft = IdeaDraft(idea: idea)
+                        }
+                        isEditing = true
+                    } label: {
                         Image(systemName: "pencil")
                     }
                     Button(role: .destructive) { showingDelete = true } label: {
