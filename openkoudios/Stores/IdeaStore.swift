@@ -128,12 +128,18 @@ private extension Idea {
         self.status = status
         let timestamp = Date()
 
-        if status == .done || status == .repeatable {
+        switch status {
+        case .pending:
+            completedAt = nil
+            lastRepeatedAt = nil
+            discardedReason = nil
+        case .done, .repeatable:
             completedAt = timestamp
             lastRepeatedAt = status == .repeatable ? timestamp : nil
-        }
-
-        if status == .discarded {
+            discardedReason = nil
+        case .discarded:
+            completedAt = nil
+            lastRepeatedAt = nil
             discardedReason = .manual
         }
     }

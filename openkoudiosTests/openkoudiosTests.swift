@@ -137,6 +137,28 @@ struct openkoudiosTests {
         defaults.removeObject(forKey: "ideas:v1")
     }
 
+    @Test func ideaStorePendingStatusClearsStatusMetadata() async throws {
+        let defaults = makeIsolatedDefaults()
+        defaults.removeObject(forKey: "ideas:v1")
+
+        let store = IdeaStore(defaults: defaults)
+        let idea = store.addIdea(rawText: "Concierto", link: nil)
+
+        store.updateStatus(for: idea, status: .discarded)
+        guard let discarded = store.ideas.first else {
+            Issue.record("Expected saved idea")
+            return
+        }
+        store.updateStatus(for: discarded, status: .pending)
+
+        #expect(store.ideas.first?.status == .pending)
+        #expect(store.ideas.first?.completedAt == nil)
+        #expect(store.ideas.first?.lastRepeatedAt == nil)
+        #expect(store.ideas.first?.discardedReason == nil)
+
+        defaults.removeObject(forKey: "ideas:v1")
+    }
+
     private func makeIdea(
         id: String = "idea",
         status: IdeaStatus = .pending,

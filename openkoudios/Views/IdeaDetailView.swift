@@ -139,13 +139,13 @@ struct IdeaDetailView: View {
             VStack(spacing: 12) {
                 HStack(spacing: 16) {
                     StatusActionButton(systemName: "checkmark", active: idea.status == .done, tint: .green) {
-                        store.updateStatus(for: idea, status: .done)
+                        toggleStatus(for: idea, selectedStatus: .done)
                     }
                     StatusActionButton(systemName: "arrow.clockwise", active: idea.status == .repeatable, tint: .orange) {
-                        store.updateStatus(for: idea, status: .repeatable)
+                        toggleStatus(for: idea, selectedStatus: .repeatable)
                     }
                     StatusActionButton(systemName: "xmark", active: idea.status == .discarded, tint: .gray) {
-                        store.updateStatus(for: idea, status: .discarded)
+                        toggleStatus(for: idea, selectedStatus: .discarded)
                     }
                 }
 
@@ -159,6 +159,11 @@ struct IdeaDetailView: View {
         .padding(22)
         .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
         .padding(20)
+    }
+
+    private func toggleStatus(for idea: Idea, selectedStatus: IdeaStatus) {
+        let nextStatus: IdeaStatus = idea.status == selectedStatus ? .pending : selectedStatus
+        store.updateStatus(for: idea, status: nextStatus)
     }
 
     private func editView(idea: Idea) -> some View {
