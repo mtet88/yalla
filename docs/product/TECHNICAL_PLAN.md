@@ -106,6 +106,8 @@ openkoudios/
   Stores/
     IdeaStore.swift
   Views/
+    DesignSystem/
+      Buttons.swift
     AppRootView.swift
     VamosView.swift
     SaveIdeaView.swift
@@ -116,6 +118,26 @@ openkoudios/
 
 openkoudiosTests/
 openkoudiosUITests/
+```
+
+## Design System / Componentes Visuales
+
+Los componentes visuales reutilizables viven en `Views/DesignSystem/`. Esta carpeta es para piezas de UI genericas de marca que deben verse igual en toda la app.
+
+Componentes actuales:
+
+```txt
+CloseButton: boton X de cierre para sheets y flujos enfocados.
+PrimaryCTAButton: CTA principal full-width para acciones como Guardar idea y Guardar cambios.
+```
+
+Reglas:
+
+```txt
+Usar Color.yallaPrimary para acciones principales de marca.
+No duplicar estilos de botones principales dentro de cada pantalla.
+Mantener los CTAs principales como botones full-width con capsule.
+Mantener el cierre de flujos enfocados con X arriba a la izquierda cuando haya NavigationStack propio.
 ```
 
 ## Navegacion iOS

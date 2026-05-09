@@ -41,15 +41,7 @@ struct IdeaDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color.yallaPrimary)
-                        .frame(width: 32, height: 32)
-                }
-                .accessibilityLabel("Cerrar")
+                CloseButton { dismiss() }
             }
 
             if idea != nil && !isEditing {
@@ -266,12 +258,8 @@ struct IdeaDetailView: View {
                 Text(error).foregroundStyle(.red).font(.subheadline.weight(.bold))
             }
 
-            HStack {
-                Button("Guardar cambios") { saveDraft(original: idea) }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.yallaPrimary)
-                Button("Cancelar") { isEditing = false; draft = nil }
-                    .buttonStyle(.bordered)
+            PrimaryCTAButton(title: "Guardar cambios") {
+                saveDraft(original: idea)
             }
         }
         .padding(22)

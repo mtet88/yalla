@@ -54,15 +54,7 @@ struct SaveIdeaView: View {
                         .foregroundStyle(.red)
                 }
 
-                Button(action: save) {
-                    Text("Guardar idea")
-                        .font(.headline.weight(.black))
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.yallaPrimary)
-                .clipShape(Capsule())
+                PrimaryCTAButton(title: "Guardar idea", action: save)
             }
             .padding(24)
             .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
@@ -72,17 +64,8 @@ struct SaveIdeaView: View {
         .navigationTitle("Guardar")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.primary)
-                        .frame(width: 32, height: 32)
-                        .background(.thinMaterial, in: Circle())
-                }
-                .accessibilityLabel("Cerrar")
+            ToolbarItem(placement: .topBarLeading) {
+                CloseButton { dismiss() }
             }
         }
     }

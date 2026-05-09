@@ -32,7 +32,7 @@
 - `Services/IdeaClassifier.swift`, `IdeaScoring.swift`, and `IdeaExpiration.swift` contain local product logic.
 - `Views/AppRootView.swift` defines the main tab structure and global save action.
 - `Views/VamosView.swift`, `IdeasListView.swift`, `SaveIdeaView.swift`, `IdeaDetailView.swift`, and `AccountView.swift` map to the main product surfaces.
-- Shared SwiftUI components live in `Views/Components.swift`.
+- Reusable branded UI controls live in `Views/DesignSystem/` (for example `CloseButton` and `PrimaryCTAButton`). Domain-specific cards/badges and shared helpers live in `Views/Components.swift`.
 
 ## Planned Integrations
 - CoreLocation is the planned way to request user location when weather/proximity is needed. Keep the app usable if permission is denied.
@@ -46,6 +46,7 @@
 - Main tabs are `Vamos!`, `Ideas`, and `Cuenta`. `Guardar idea` is a focused sheet opened from a floating global `+` action on `Vamos!` and `Ideas`.
 - Idea detail opens as a modal sheet from suggestion/list cards, not as a push. The modal owns its `NavigationStack` and has an explicit `X` close action.
 - Hide or avoid global navigation chrome during focused save/detail flows when it creates accidental exits or distraction. `SaveIdeaView` closes with `X`, not a `Cancelar` text button.
+- Use reusable design-system controls for repeated branded UI, especially the sheet `X` close button and primary full-width CTA buttons like `Guardar idea` / `Guardar cambios`.
 - UI copy is Spanish. Existing source may include non-ASCII Spanish such as `Mañana`; otherwise prefer ASCII if editing nearby ASCII-only text.
 
 ## Commands

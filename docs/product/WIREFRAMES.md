@@ -148,7 +148,7 @@ Capturar una idea con minima friccion.
 
 ```txt
 ┌─────────────────────────────┐
-│                  [ X ]      │
+│ [ X ]                       │
 ├─────────────────────────────┤
 │ Tira cualquier plan aqui.   │
 │                             │
@@ -166,6 +166,8 @@ Capturar una idea con minima friccion.
 │ [Guardar idea]              │
 └─────────────────────────────┘
 ```
+
+La `X` usa el componente reutilizable `CloseButton`. El boton `Guardar idea` usa el CTA principal reutilizable, igual que `Guardar cambios` en edicion.
 
 ### Despues de Guardar
 
@@ -199,7 +201,6 @@ Al guardar, cerrar la sheet y dejar la idea disponible en `Vamos!` e `Ideas`. Lo
 │ [Opcional]                  │
 ├─────────────────────────────┤
 │ [Guardar cambios]           │
-│ [Listo]                     │
 └─────────────────────────────┘
 ```
 
