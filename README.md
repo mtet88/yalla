@@ -40,6 +40,14 @@ openkoudiosUITests/    XCTest/XCUITest UI tests
 
 The SwiftUI entrypoint is `openkoudios/openkoudiosApp.swift`, which loads `ContentView`, which loads `AppRootView`.
 
+### Snapshot Testing
+The application includes a visual testing system (Snapshot Tests) configured for **iPhone 17** (402x874pt).
+
+- **Modes:** Each test automatically verifies both **Light Mode** and **Dark Mode**.
+- **References:** Reference images are stored in `openkoudiosTests/Snapshots/`.
+- **Regression:** If a view changes, the test will fail and attach a **Visual Diff** to the Xcode report highlighting the differences.
+- **Updating:** To update reference images, temporarily set `recordMode = true` in `SnapshotTests.swift`.
+
 ## Development
 
 Open the project in Xcode:

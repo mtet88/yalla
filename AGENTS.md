@@ -47,6 +47,7 @@
 - Idea detail opens as a modal sheet from suggestion/list cards, not as a push. The modal owns its `NavigationStack` and has an explicit `X` close action.
 - Hide or avoid global navigation chrome during focused save/detail flows when it creates accidental exits or distraction. `SaveIdeaView` closes with `X`, not a `Cancelar` text button.
 - Use reusable design-system controls for repeated branded UI, especially the sheet `X` close button and primary full-width CTA buttons like `Guardar idea` / `Guardar cambios`.
+- **Snapshot Testing:** All main views must have a snapshot test. The standard device is iPhone 17 (402x874pt). It is mandatory to verify both themes (Light/Dark).
 - UI copy is Spanish. Existing source may include non-ASCII Spanish such as `Mañana`; otherwise prefer ASCII if editing nearby ASCII-only text.
 
 ## Commands
