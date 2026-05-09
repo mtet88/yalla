@@ -10,12 +10,12 @@ struct AccountView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Por ahora tus ideas se guardan en este dispositivo. El login con Google/email y la migracion a Supabase vendran despues de validar el flujo local.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.secondaryText)
                         .lineSpacing(4)
 
                     Button("Continuar con Google proximamente") {}
                         .buttonStyle(.borderedProminent)
-                        .tint(.black)
+                        .tint(.yallaPrimary)
                         .disabled(true)
 
                     Button("Entrar con email proximamente") {}
@@ -24,7 +24,7 @@ struct AccountView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(22)
-                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
             }
             .padding(20)
         }

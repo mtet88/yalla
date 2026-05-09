@@ -29,10 +29,10 @@ struct IdeaDetailView: View {
                     Text("Idea no encontrada")
                         .font(.title2.weight(.black))
                     Text("Puede que haya sido eliminada localmente.")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.secondaryText)
                     Button("Volver a ideas") { dismiss() }
                         .buttonStyle(.borderedProminent)
-                        .tint(.black)
+                        .tint(.yallaPrimary)
                 }
                 .padding()
             }
@@ -84,7 +84,7 @@ struct IdeaDetailView: View {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundStyle(.white)
                         .padding(12)
-                        .background(.black, in: Circle())
+                        .background(Color.iconButtonBackground, in: Circle())
                 }
             }
 
@@ -130,7 +130,7 @@ struct IdeaDetailView: View {
                     DetailRow(label: "Hecha", value: idea.completedAt.map(formatDate) ?? "Todavia no")
                 }
                 .padding(16)
-                .background(.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .background(Color.softBackground, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             }
 
             VStack(spacing: 12) {
@@ -154,7 +154,7 @@ struct IdeaDetailView: View {
             .frame(maxWidth: .infinity)
         }
         .padding(22)
-        .background(.white, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
         .padding(20)
     }
 
@@ -241,7 +241,7 @@ struct IdeaDetailView: View {
                     .font(.caption.weight(.bold))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 7)
-                    .background(draftBinding.wrappedValue.idealConditions.contains(condition) ? Color.green : Color.gray.opacity(0.14), in: Capsule())
+                    .background(draftBinding.wrappedValue.idealConditions.contains(condition) ? Color.green : Color.softBackground, in: Capsule())
                     .foregroundStyle(draftBinding.wrappedValue.idealConditions.contains(condition) ? Color.white : Color.primary)
                 }
             }
@@ -251,7 +251,8 @@ struct IdeaDetailView: View {
                 TextEditor(text: draftBinding.notes)
                     .frame(minHeight: 100)
                     .padding(8)
-                    .background(.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .scrollContentBackground(.hidden)
+                    .background(Color.softBackground, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
 
             if !error.isEmpty {
@@ -261,13 +262,13 @@ struct IdeaDetailView: View {
             HStack {
                 Button("Guardar cambios") { saveDraft(original: idea) }
                     .buttonStyle(.borderedProminent)
-                    .tint(.black)
+                    .tint(.yallaPrimary)
                 Button("Cancelar") { isEditing = false; draft = nil }
                     .buttonStyle(.bordered)
             }
         }
         .padding(22)
-        .background(.white, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
         .padding(20)
         .onAppear { draft = IdeaDraft(idea: idea) }
     }
@@ -381,7 +382,7 @@ private struct DetailRow<Content: View>: View {
                 .font(.headline.weight(.black))
             content
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.secondaryText)
         }
     }
 }

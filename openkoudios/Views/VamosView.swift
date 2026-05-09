@@ -39,7 +39,7 @@ struct VamosView: View {
                             .multilineTextAlignment(.center)
                         Text("Prueba otro momento o guarda una nueva idea.")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.secondaryText)
                             .multilineTextAlignment(.center)
                     }
                     .frame(maxWidth: .infinity)
@@ -98,7 +98,7 @@ private struct MomentPicker: View {
                             .foregroundStyle(selection == moment ? Color.white : Color.primary)
                             .padding(.horizontal, 14)
                             .padding(.vertical, 9)
-                            .background(selection == moment ? Color.primary : Color.white.opacity(0.85), in: Capsule())
+                            .background(selection == moment ? Color.selectedChipBackground : Color.chipBackground, in: Capsule())
                     }
                     .buttonStyle(.plain)
                     .accessibilityValue(selection == moment ? "Seleccionado" : "")
@@ -144,7 +144,7 @@ private struct SuggestionCard: View {
                     .lineLimit(3)
                 Text(suggestion.reasons.first ?? "Esta en tu lista de ideas pendientes.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryText)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
             }
@@ -152,18 +152,18 @@ private struct SuggestionCard: View {
             .frame(height: 150, alignment: .topLeading)
         }
         .frame(width: 320)
-        .background(.white, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         .shadow(color: .black.opacity(0.07), radius: 16, y: 7)
     }
 
     private var colors: [Color] {
         switch suggestion.idea.category {
-        case .food: [.orange.opacity(0.45), .pink.opacity(0.25), .white]
-        case .places: [.green.opacity(0.45), .cyan.opacity(0.25), .white]
-        case .events: [.purple.opacity(0.45), .cyan.opacity(0.25), .white]
-        case .plans: [.green.opacity(0.45), .yellow.opacity(0.25), .white]
-        case .other: [.gray.opacity(0.35), .cyan.opacity(0.2), .white]
+        case .food: [.orange.opacity(0.45), .pink.opacity(0.25), .cardBackground]
+        case .places: [.green.opacity(0.45), .cyan.opacity(0.25), .cardBackground]
+        case .events: [.purple.opacity(0.45), .cyan.opacity(0.25), .cardBackground]
+        case .plans: [.green.opacity(0.45), .yellow.opacity(0.25), .cardBackground]
+        case .other: [.gray.opacity(0.35), .cyan.opacity(0.2), .cardBackground]
         }
     }
 }

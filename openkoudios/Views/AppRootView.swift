@@ -26,7 +26,7 @@ struct AppRootView: View {
                 .tabItem { Label("Cuenta", systemImage: "person") }
                 .tag(AppTab.account)
             }
-            .tint(.green)
+            .tint(.yallaPrimary)
 
             if selectedTab == .vamos || selectedTab == .ideas {
                 Button {
@@ -36,8 +36,8 @@ struct AppRootView: View {
                         .font(.system(size: 28, weight: .regular))
                         .foregroundStyle(.white)
                         .frame(width: 60, height: 60)
-                        .background(.green, in: Circle())
-                        .shadow(color: .green.opacity(0.28), radius: 16, y: 8)
+                        .background(Color.yallaPrimary, in: Circle())
+                        .shadow(color: Color.yallaPrimary.opacity(0.28), radius: 16, y: 8)
                 }
                 .padding(.trailing, 22)
                 .padding(.bottom, 78)

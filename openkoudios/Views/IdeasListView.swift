@@ -27,7 +27,7 @@ struct IdeasListView: View {
                             .foregroundStyle(activeFilter == filter ? Color.white : Color.primary)
                             .padding(.horizontal, 14)
                             .padding(.vertical, 9)
-                            .background(activeFilter == filter ? Color.black : Color.white, in: Capsule())
+                            .background(activeFilter == filter ? Color.selectedChipBackground : Color.chipBackground, in: Capsule())
                         }
                     }
                     .padding(.vertical, 4)

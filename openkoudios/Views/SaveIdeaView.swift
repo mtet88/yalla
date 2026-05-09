@@ -16,7 +16,7 @@ struct SaveIdeaView: View {
                         .font(.largeTitle.weight(.black))
                     Text("Puede ser un restaurante, evento, sitio o algo como jugar Nintendo Switch en casa.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.secondaryText)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -25,11 +25,12 @@ struct SaveIdeaView: View {
                     TextEditor(text: $rawText)
                         .frame(minHeight: 150)
                         .padding(10)
-                        .background(.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .scrollContentBackground(.hidden)
+                        .background(Color.softBackground, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .overlay(alignment: .topLeading) {
                             if rawText.isEmpty {
                                 Text("Picnic en el parque cuando haga buen clima")
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.secondaryText)
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 18)
                                     .allowsHitTesting(false)
@@ -44,7 +45,7 @@ struct SaveIdeaView: View {
                         .textInputAutocapitalization(.never)
                         .keyboardType(.URL)
                         .padding(14)
-                        .background(.gray.opacity(0.08), in: Capsule())
+                        .background(Color.softBackground, in: Capsule())
                 }
 
                 if !error.isEmpty {
@@ -60,11 +61,11 @@ struct SaveIdeaView: View {
                         .padding()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.green)
+                .tint(.yallaPrimary)
                 .clipShape(Capsule())
             }
             .padding(24)
-            .background(.white, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
+            .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 32, style: .continuous))
             .padding(20)
         }
         .background(Color.appBackground.ignoresSafeArea())

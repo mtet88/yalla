@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct CategoryBadge: View {
     let category: IdeaCategory
@@ -52,29 +53,29 @@ struct EmptyStateView: View {
         VStack(spacing: 16) {
             Image(systemName: "plus.circle")
                 .font(.system(size: 48, weight: .bold))
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.yallaPrimary)
             Text(title)
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
             Text(bodyText)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
 
             if let action {
                 Button("Guardar primera idea", action: action)
                     .font(.headline)
                     .buttonStyle(.borderedProminent)
-                    .tint(.orange)
+                    .tint(.yallaPrimary)
                     .clipShape(Capsule())
             }
         }
         .frame(maxWidth: .infinity)
         .padding(28)
-        .background(.white.opacity(0.75), in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .background(Color.cardBackground.opacity(0.75), in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(.gray.opacity(0.25), style: StrokeStyle(lineWidth: 1, dash: [6]))
+                .stroke(Color.border.opacity(0.7), style: StrokeStyle(lineWidth: 1, dash: [6]))
         )
     }
 }
@@ -95,7 +96,7 @@ struct IdeaCardView: View {
                     Image(systemName: "link")
                         .foregroundStyle(.white)
                         .padding(8)
-                        .background(.black, in: Circle())
+                        .background(Color.iconButtonBackground, in: Circle())
                 }
             }
 
@@ -106,13 +107,13 @@ struct IdeaCardView: View {
             if let summary = idea.dateSummary {
                 Label(summary, systemImage: "calendar")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryText)
             }
 
             if let locationName = idea.locationName, !locationName.isEmpty {
                 Label(locationName, systemImage: "mappin")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryText)
             }
 
             if let delete {
@@ -126,7 +127,7 @@ struct IdeaCardView: View {
             }
         }
         .padding(18)
-        .background(.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
         .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
     }
 }
@@ -155,5 +156,20 @@ extension Idea {
 }
 
 extension Color {
-    static let appBackground = Color(red: 0.93, green: 0.98, blue: 1.0)
+    static let yallaPrimary = adaptive(light: UIColor(red: 1.00, green: 0.42, blue: 0.24, alpha: 1), dark: UIColor(red: 1.00, green: 0.55, blue: 0.30, alpha: 1))
+    static let yallaPrimarySoft = adaptive(light: UIColor(red: 1.00, green: 0.42, blue: 0.24, alpha: 0.14), dark: UIColor(red: 1.00, green: 0.55, blue: 0.30, alpha: 0.22))
+    static let appBackground = adaptive(light: UIColor(red: 0.93, green: 0.98, blue: 1.00, alpha: 1), dark: UIColor(red: 0.06, green: 0.09, blue: 0.11, alpha: 1))
+    static let cardBackground = adaptive(light: UIColor.white, dark: UIColor(red: 0.12, green: 0.15, blue: 0.17, alpha: 1))
+    static let softBackground = adaptive(light: UIColor(red: 0.95, green: 0.96, blue: 0.97, alpha: 1), dark: UIColor(red: 0.18, green: 0.22, blue: 0.25, alpha: 1))
+    static let chipBackground = adaptive(light: UIColor.white.withAlphaComponent(0.88), dark: UIColor(red: 0.17, green: 0.21, blue: 0.24, alpha: 1))
+    static let selectedChipBackground = adaptive(light: UIColor.black, dark: UIColor(red: 1.00, green: 0.55, blue: 0.30, alpha: 1))
+    static let iconButtonBackground = adaptive(light: UIColor.black, dark: UIColor(red: 1.00, green: 0.55, blue: 0.30, alpha: 1))
+    static let secondaryText = adaptive(light: UIColor.secondaryLabel, dark: UIColor(red: 0.70, green: 0.76, blue: 0.80, alpha: 1))
+    static let border = adaptive(light: UIColor(red: 0.77, green: 0.83, blue: 0.86, alpha: 1), dark: UIColor(red: 0.27, green: 0.33, blue: 0.37, alpha: 1))
+
+    private static func adaptive(light: UIColor, dark: UIColor) -> Color {
+        Color(UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark ? dark : light
+        })
+    }
 }
