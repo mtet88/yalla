@@ -128,6 +128,7 @@ Componentes actuales:
 
 ```txt
 CloseButton: boton X de cierre para sheets y flujos enfocados.
+ConfirmButton: boton check de confirmacion para toolbar en sheets enfocadas.
 PrimaryCTAButton: CTA principal full-width para acciones como Guardar idea y Guardar cambios.
 ```
 

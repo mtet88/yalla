@@ -238,7 +238,6 @@ Ver una idea en modal sin entrar directamente al formulario de edicion. Desde el
 
 ```txt
 Titulo
-Texto original
 Categoria
 Estado
 Link

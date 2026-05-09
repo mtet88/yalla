@@ -179,10 +179,7 @@ Al guardar, cerrar la sheet y dejar la idea disponible en `Vamos!` e `Ideas`. Lo
 │ Puedes completarla ahora o  │
 │ dejarla asi.                │
 ├─────────────────────────────┤
-│ Titulo                      │
-│ Picnic en el parque         │
-│                             │
-│ Categoria                   │
+│ Tipo de idea                │
 │ [Planes v]                  │
 │                             │
 │ Estado                      │
@@ -190,6 +187,12 @@ Al guardar, cerrar la sheet y dejar la idea disponible en `Vamos!` e `Ideas`. Lo
 │                             │
 │ Fecha                       │
 │ [Sin fecha v]               │
+│                             │
+│ Titulo                      │
+│ Picnic en el parque         │
+│                             │
+│ Link                        │
+│ [https://...]               │
 │                             │
 │ Ubicacion                   │
 │ [Agregar pin en mapa]       │
@@ -203,6 +206,8 @@ Al guardar, cerrar la sheet y dejar la idea disponible en `Vamos!` e `Ideas`. Lo
 │ [Guardar cambios]           │
 └─────────────────────────────┘
 ```
+
+Si la idea tiene fecha especifica o rango, el valor se muestra como texto normal junto a una `X` para limpiar la fecha. Elegir fecha especifica o rango abre una sheet enfocada con `X` arriba izquierda y check arriba derecha.
 
 ## Screen: Ideas
 
@@ -263,11 +268,11 @@ Ver una idea sin entrar directamente al formulario de edicion.
 │ [X] Detalle          Editar │
 ├─────────────────────────────┤
 │ Picnic en el parque         │
-│ Texto original              │
 │                             │
 │ Categoria: Planes           │
 │ Estado: Pendiente           │
-│ Fecha: Sin fecha            │
+│ Fecha                       │
+│ 15 may 2026                 │
 │ Ubicacion: -                │
 │ Condiciones: Buen clima     │
 │ Notas: -                    │
