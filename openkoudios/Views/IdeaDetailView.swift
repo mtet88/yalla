@@ -10,6 +10,7 @@ struct IdeaDetailView: View {
     @State private var draft: IdeaDraft?
     @State private var showingDelete = false
     @State private var error = ""
+    @State private var activeDateEditor: DateEditorMode?
 
     private var idea: Idea? { store.idea(with: ideaID) }
 
@@ -69,6 +70,12 @@ struct IdeaDetailView: View {
             }
             Button("Cancelar", role: .cancel) {}
         }
+        .sheet(item: $activeDateEditor) { mode in
+            dateEditorSheet(mode: mode)
+                .presentationDetents([mode.detent])
+                .presentationDragIndicator(.visible)
+                .presentationBackground(Color.appBackground)
+        }
     }
 
     private func detailView(idea: Idea) -> some View {
@@ -88,8 +95,6 @@ struct IdeaDetailView: View {
                 .font(.largeTitle.weight(.black))
 
             VStack(alignment: .leading, spacing: 18) {
-                DetailRow(label: "Texto original", value: idea.rawText)
-
                 if let link = idea.link, !link.isEmpty {
                     DetailRow(label: "Link") {
                         Button(link) {
@@ -163,29 +168,34 @@ struct IdeaDetailView: View {
                 set: { draft = $0 }
             )
 
-            HStack(spacing: 8) {
-                CategoryBadge(category: draftBinding.wrappedValue.category)
-                StatusBadge(status: draftBinding.wrappedValue.status)
+            HStack {
+                Text("Tipo de idea")
+                    .font(.headline)
+                Spacer()
+                Picker("Tipo de idea", selection: draftBinding.category) {
+                    ForEach(IdeaCategory.allCases) { category in
+                        Text(category.label).tag(category)
+                    }
+                }
             }
+
+            HStack {
+                Text("Estado")
+                    .font(.headline)
+                Spacer()
+                Picker("Estado", selection: draftBinding.status) {
+                    ForEach(IdeaStatus.allCases) { status in
+                        Text(status.label).tag(status)
+                    }
+                }
+            }
+
+            dateSelectionRow(draftBinding: draftBinding)
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Titulo").font(.headline)
                 TextField("Titulo", text: draftBinding.title)
                     .textFieldStyle(.roundedBorder)
-            }
-
-            DetailRow(label: "Texto original", value: idea.rawText)
-
-            Picker("Categoria", selection: draftBinding.category) {
-                ForEach(IdeaCategory.allCases) { category in
-                    Text(category.label).tag(category)
-                }
-            }
-
-            Picker("Estado", selection: draftBinding.status) {
-                ForEach(IdeaStatus.allCases) { status in
-                    Text(status.label).tag(status)
-                }
             }
 
             VStack(alignment: .leading, spacing: 8) {
@@ -194,28 +204,6 @@ struct IdeaDetailView: View {
                     .textInputAutocapitalization(.never)
                     .keyboardType(.URL)
                     .textFieldStyle(.roundedBorder)
-            }
-
-            Picker("Fecha", selection: draftBinding.dateType) {
-                ForEach(IdeaDateType.allCases) { type in
-                    Text(type.label).tag(type)
-                }
-            }
-
-            if draftBinding.wrappedValue.dateType == .single || draftBinding.wrappedValue.dateType == .range {
-                DatePicker("Empieza", selection: dateBinding(draftBinding.dateStart), displayedComponents: .date)
-            }
-
-            if draftBinding.wrappedValue.dateType == .range {
-                DatePicker("Termina", selection: dateBinding(draftBinding.dateEnd), displayedComponents: .date)
-            }
-
-            if draftBinding.wrappedValue.dateType == .flexible {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Nota flexible").font(.headline)
-                    TextField("Cuando haga buen clima...", text: draftBinding.flexibleNote)
-                        .textFieldStyle(.roundedBorder)
-                }
             }
 
             VStack(alignment: .leading, spacing: 8) {
@@ -268,11 +256,94 @@ struct IdeaDetailView: View {
         .onAppear { draft = IdeaDraft(idea: idea) }
     }
 
-    private func dateBinding(_ value: Binding<Date?>) -> Binding<Date> {
-        Binding<Date>(
-            get: { value.wrappedValue ?? Date() },
-            set: { value.wrappedValue = $0 }
+    @ViewBuilder
+    private func dateSelectionRow(draftBinding: Binding<IdeaDraft>) -> some View {
+        let currentDraft = draftBinding.wrappedValue
+
+        HStack {
+            Text("Fecha")
+                .font(.headline)
+            Spacer()
+
+            if currentDraft.dateType == .single, let date = currentDraft.dateStart {
+                selectedDateLabel(formatCompactDate(date)) {
+                    clearDate(draftBinding: draftBinding)
+                }
+            } else if currentDraft.dateType == .range, let start = currentDraft.dateStart, let end = currentDraft.dateEnd {
+                selectedDateLabel("\(formatCompactDate(start)) - \(formatCompactDate(end))") {
+                    clearDate(draftBinding: draftBinding)
+                }
+            } else {
+                Picker("Fecha", selection: dateTypeSelection(draftBinding)) {
+                    ForEach(IdeaDateType.editableCases) { type in
+                        Text(type.label).tag(type)
+                    }
+                }
+            }
+        }
+    }
+
+    private func selectedDateLabel(_ text: String, clear: @escaping () -> Void) -> some View {
+        HStack(spacing: 8) {
+            Text(text)
+                .font(.subheadline)
+            Button(action: clear) {
+                Image(systemName: "xmark")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(Color.yallaPrimary)
+                    .frame(width: 24, height: 24)
+            }
+            .accessibilityLabel("Quitar fecha")
+        }
+    }
+
+    private func dateTypeSelection(_ draftBinding: Binding<IdeaDraft>) -> Binding<IdeaDateType> {
+        Binding<IdeaDateType>(
+            get: { draftBinding.wrappedValue.dateType },
+            set: { nextType in
+                switch nextType {
+                case .none:
+                    clearDate(draftBinding: draftBinding)
+                case .single:
+                    activeDateEditor = .single
+                case .range:
+                    activeDateEditor = .range
+                }
+            }
         )
+    }
+
+    private func clearDate(draftBinding: Binding<IdeaDraft>) {
+        var next = draftBinding.wrappedValue
+        next.dateType = .none
+        next.dateStart = nil
+        next.dateEnd = nil
+        draftBinding.wrappedValue = next
+    }
+
+    private func dateEditorSheet(mode: DateEditorMode) -> some View {
+        NavigationStack {
+            switch mode {
+            case .single:
+                SingleDatePickerSheet(initialDate: draft?.dateStart ?? Date()) { selectedDate in
+                    guard var draft else { return }
+                    draft.dateType = .single
+                    draft.dateStart = selectedDate
+                    draft.dateEnd = nil
+                    self.draft = draft
+                    activeDateEditor = nil
+                }
+            case .range:
+                DateRangePickerSheet(initialStart: draft?.dateStart ?? Date(), initialEnd: draft?.dateEnd ?? draft?.dateStart ?? Date()) { startDate, endDate in
+                    guard var draft else { return }
+                    draft.dateType = .range
+                    draft.dateStart = startDate
+                    draft.dateEnd = max(startDate, endDate)
+                    self.draft = draft
+                    activeDateEditor = nil
+                }
+            }
+        }
     }
 
     private func saveDraft(original: Idea) {
@@ -293,7 +364,6 @@ struct IdeaDetailView: View {
         updated.dateType = draft.dateType
         updated.dateStart = draft.dateType == .single || draft.dateType == .range ? draft.dateStart : nil
         updated.dateEnd = draft.dateType == .range ? draft.dateEnd : nil
-        updated.flexibleNote = draft.dateType == .flexible ? nilIfEmpty(draft.flexibleNote) : nil
         updated.locationName = nilIfEmpty(draft.locationName)
         updated.idealConditions = draft.idealConditions
         updated.notes = nilIfEmpty(draft.notes)
@@ -324,6 +394,13 @@ struct IdeaDetailView: View {
         date.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year())
     }
 
+    private func formatCompactDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "es_ES")
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: date)
+    }
+
     private func statusColor(_ status: IdeaStatus) -> Color {
         switch status {
         case .pending: .secondary
@@ -342,7 +419,6 @@ private struct IdeaDraft {
     var dateType: IdeaDateType
     var dateStart: Date?
     var dateEnd: Date?
-    var flexibleNote: String
     var locationName: String
     var idealConditions: [IdealCondition]
     var notes: String
@@ -352,13 +428,121 @@ private struct IdeaDraft {
         category = idea.category
         status = idea.status
         link = idea.link ?? ""
-        dateType = idea.dateType
         dateStart = idea.dateStart
         dateEnd = idea.dateEnd
-        flexibleNote = idea.flexibleNote ?? ""
+        if idea.dateType == .single, idea.dateStart != nil {
+            dateType = .single
+        } else if idea.dateType == .range, idea.dateStart != nil, idea.dateEnd != nil {
+            dateType = .range
+        } else {
+            dateType = .none
+        }
         locationName = idea.locationName ?? ""
         idealConditions = idea.idealConditions
         notes = idea.notes ?? ""
+    }
+}
+
+private enum DateEditorMode: Identifiable {
+    case single
+    case range
+
+    var id: String {
+        switch self {
+        case .single: "single"
+        case .range: "range"
+        }
+    }
+
+    var detent: PresentationDetent {
+        switch self {
+        case .single: .height(500)
+        case .range: .height(260)
+        }
+    }
+}
+
+private struct SingleDatePickerSheet: View {
+    let onSave: (Date) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedDate: Date
+
+    init(initialDate: Date, onSave: @escaping (Date) -> Void) {
+        self.onSave = onSave
+        _selectedDate = State(initialValue: initialDate)
+    }
+
+    var body: some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 16) {
+                DatePicker("Fecha", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 8)
+            .padding(.bottom, 8)
+        }
+        .navigationTitle("Fecha especifica")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                CloseButton { dismiss() }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                ConfirmButton { onSave(selectedDate) }
+            }
+        }
+    }
+}
+
+private struct DateRangePickerSheet: View {
+    let onSave: (Date, Date) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var startDate: Date
+    @State private var endDate: Date
+
+    init(initialStart: Date, initialEnd: Date, onSave: @escaping (Date, Date) -> Void) {
+        self.onSave = onSave
+        _startDate = State(initialValue: initialStart)
+        _endDate = State(initialValue: max(initialStart, initialEnd))
+    }
+
+    var body: some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 14) {
+                DatePicker("Empieza", selection: $startDate, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                    .onChange(of: startDate) { _, newStartDate in
+                        if endDate < newStartDate {
+                            endDate = newStartDate
+                        }
+                    }
+
+                DatePicker("Termina", selection: $endDate, in: startDate..., displayedComponents: .date)
+                    .datePickerStyle(.compact)
+            }
+            .padding(24)
+        }
+        .navigationTitle("Rango de fechas")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                CloseButton { dismiss() }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                ConfirmButton { onSave(startDate, endDate) }
+            }
+        }
     }
 }
 
@@ -450,7 +634,6 @@ private struct WrappingLayout: Layout {
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let maxWidth = bounds.width
         var currentX = bounds.minX
         var currentY = bounds.minY
         var lineHeight: CGFloat = 0

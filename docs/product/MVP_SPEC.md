@@ -27,7 +27,7 @@ Crear idea con texto libre y link opcional
 Editar detalles de una idea
 Estados: Pendiente, Hecha, Repetible, Descartada
 Categorias: Comida, Sitios, Eventos, Planes, Otro
-Fechas: sin fecha, especifica, rango, flexible
+Fechas editables: sin fecha, especifica, rango
 Persistencia local en UserDefaults bajo ideas:v1
 Sugerencias por scoring simple y explicable
 Compartir idea o sugerencia usando ShareLink/share sheet nativa

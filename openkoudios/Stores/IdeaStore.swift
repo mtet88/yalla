@@ -85,7 +85,6 @@ final class IdeaStore {
             dateType: .none,
             dateStart: nil,
             dateEnd: nil,
-            flexibleNote: nil,
             locationName: nil,
             latitude: nil,
             longitude: nil,

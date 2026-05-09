@@ -38,7 +38,7 @@ enum IdeaExpiration {
         case .range:
             guard let date = idea.dateEnd ?? idea.dateStart else { return nil }
             return Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: date))
-        case .none, .flexible:
+        case .none:
             return nil
         }
     }

@@ -52,16 +52,18 @@ enum IdeaDateType: String, Codable, CaseIterable, Identifiable {
     case none
     case single
     case range
-    case flexible
 
     var id: String { rawValue }
+
+    static var editableCases: [IdeaDateType] {
+        allCases
+    }
 
     var label: String {
         switch self {
         case .none: "Sin fecha"
         case .single: "Fecha especifica"
         case .range: "Rango"
-        case .flexible: "Flexible"
         }
     }
 }
@@ -108,7 +110,6 @@ struct Idea: Identifiable, Codable, Hashable {
     var dateType: IdeaDateType
     var dateStart: Date?
     var dateEnd: Date?
-    var flexibleNote: String?
     var locationName: String?
     var latitude: Double?
     var longitude: Double?

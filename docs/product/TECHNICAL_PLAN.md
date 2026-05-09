@@ -178,7 +178,6 @@ enum IdeaDateType: String, Codable {
     case none
     case single
     case range
-    case flexible
 }
 
 struct Idea: Identifiable, Codable, Hashable {
@@ -192,7 +191,6 @@ struct Idea: Identifiable, Codable, Hashable {
     var dateType: IdeaDateType
     var dateStart: Date?
     var dateEnd: Date?
-    var flexibleNote: String?
     var locationName: String?
     var latitude: Double?
     var longitude: Double?

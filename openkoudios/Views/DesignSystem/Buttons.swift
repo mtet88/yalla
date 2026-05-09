@@ -14,6 +14,20 @@ struct CloseButton: View {
     }
 }
 
+struct ConfirmButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "checkmark")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.yallaPrimary)
+                .frame(width: 32, height: 32)
+        }
+        .accessibilityLabel("Aceptar")
+    }
+}
+
 struct PrimaryCTAButton: View {
     let title: String
     let action: () -> Void

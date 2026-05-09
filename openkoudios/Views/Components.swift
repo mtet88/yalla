@@ -138,7 +138,7 @@ extension Idea {
         case .none:
             nil
         case .single:
-            dateStart.map { "Fecha: \($0.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()))" } ?? "Fecha especifica sin definir"
+            dateStart.map { $0.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()) } ?? "Fecha especifica sin definir"
         case .range:
             if let dateStart, let dateEnd {
                 "\(dateStart.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year())) - \(dateEnd.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()))"
@@ -149,8 +149,6 @@ extension Idea {
             } else {
                 "Rango sin definir"
             }
-        case .flexible:
-            flexibleNote?.isEmpty == false ? flexibleNote : "Flexible"
         }
     }
 }

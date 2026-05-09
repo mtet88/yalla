@@ -81,7 +81,7 @@ enum IdeaScoring {
     private static func getDateFit(idea: Idea, context: SuggestionContext) -> (applies: Bool, score: Int, reason: String?) {
         let target = targetRange(for: context)
         let allowsNearFuture = context.moment == .weekend
-        let allowsFallback = idea.dateType == .none || idea.dateType == .flexible
+        let allowsFallback = idea.dateType == .none
 
         switch idea.dateType {
         case .single:
@@ -119,12 +119,6 @@ enum IdeaScoring {
             }
 
             return (false, 0, nil)
-        case .flexible:
-            if let note = idea.flexibleNote, !note.isEmpty {
-                return (true, 4, "Flexible: \(note).")
-            }
-
-            return (true, 4, "Es flexible para este momento.")
         case .none:
             return (allowsFallback, 0, nil)
         }

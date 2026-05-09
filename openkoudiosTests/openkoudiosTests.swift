@@ -161,7 +161,6 @@ struct openkoudiosTests {
             dateType: dateType,
             dateStart: dateStart,
             dateEnd: dateEnd,
-            flexibleNote: nil,
             locationName: nil,
             latitude: nil,
             longitude: nil,

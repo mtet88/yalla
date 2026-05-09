@@ -187,7 +187,6 @@ La V1 debe soportar:
 Sin fecha
 Fecha especifica
 Rango de fechas
-Fecha flexible
 ```
 
 Ejemplos:
@@ -196,7 +195,6 @@ Ejemplos:
 Sin fecha: Restaurante pendiente.
 Fecha especifica: Concierto el 12 de junio.
 Rango de fechas: Exhibicion del 1 al 30 de agosto.
-Fecha flexible: Picnic cuando haga buen clima.
 ```
 
 ## Ubicacion
