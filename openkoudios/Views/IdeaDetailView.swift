@@ -46,9 +46,8 @@ struct IdeaDetailView: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(Color.yallaPrimary)
                         .frame(width: 32, height: 32)
-                        .background(.thinMaterial, in: Circle())
                 }
                 .accessibilityLabel("Cerrar")
             }
@@ -122,6 +121,7 @@ struct IdeaDetailView: View {
                                 .padding(.vertical, 6)
                                 .background(.green.opacity(0.12), in: Capsule())
                                 .foregroundStyle(.green)
+                                .fixedSize(horizontal: true, vertical: false)
                         }
                     }
                 }
@@ -135,6 +135,7 @@ struct IdeaDetailView: View {
                     DetailRow(label: "Hecha", value: idea.completedAt.map(formatDate) ?? "Todavia no")
                 }
                 .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.softBackground, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             }
 
@@ -248,6 +249,7 @@ struct IdeaDetailView: View {
                     .padding(.vertical, 7)
                     .background(draftBinding.wrappedValue.idealConditions.contains(condition) ? Color.green : Color.softBackground, in: Capsule())
                     .foregroundStyle(draftBinding.wrappedValue.idealConditions.contains(condition) ? Color.white : Color.primary)
+                    .fixedSize(horizontal: true, vertical: false)
                 }
             }
 
@@ -421,10 +423,65 @@ private struct FlowLayout<Data: RandomAccessCollection, Content: View>: View whe
     let content: (Data.Element) -> Content
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 8)], alignment: .leading, spacing: 8) {
+        WrappingLayout(horizontalSpacing: 8, verticalSpacing: 8) {
             ForEach(Array(items), id: \.self) { item in
                 content(item)
             }
+        }
+    }
+}
+
+private struct WrappingLayout: Layout {
+    let horizontalSpacing: CGFloat
+    let verticalSpacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let maxWidth = proposal.width ?? .greatestFiniteMagnitude
+        var currentX: CGFloat = 0
+        var currentY: CGFloat = 0
+        var lineHeight: CGFloat = 0
+        var measuredWidth: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            let nextX = currentX == 0 ? size.width : currentX + horizontalSpacing + size.width
+
+            if currentX > 0 && nextX > maxWidth {
+                currentY += lineHeight + verticalSpacing
+                currentX = size.width
+                lineHeight = size.height
+            } else {
+                currentX = nextX
+                lineHeight = max(lineHeight, size.height)
+            }
+
+            measuredWidth = max(measuredWidth, currentX)
+        }
+
+        return CGSize(width: proposal.width ?? measuredWidth, height: currentY + lineHeight)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let maxWidth = bounds.width
+        var currentX = bounds.minX
+        var currentY = bounds.minY
+        var lineHeight: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            let nextX = currentX == bounds.minX ? currentX + size.width : currentX + horizontalSpacing + size.width
+
+            if currentX > bounds.minX && nextX > bounds.maxX {
+                currentY += lineHeight + verticalSpacing
+                currentX = bounds.minX
+                lineHeight = 0
+            } else if currentX > bounds.minX {
+                currentX += horizontalSpacing
+            }
+
+            subview.place(at: CGPoint(x: currentX, y: currentY), proposal: ProposedViewSize(size))
+            currentX += size.width
+            lineHeight = max(lineHeight, size.height)
         }
     }
 }
