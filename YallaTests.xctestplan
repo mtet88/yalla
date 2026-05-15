@@ -15,9 +15,9 @@
     {
       "parallelizable" : false,
       "target" : {
-        "containerPath" : "container:openkoudios.xcodeproj",
+        "containerPath" : "container:Yalla.xcodeproj",
         "identifier" : "8722A3B82FABDD12000B5CD9",
-        "name" : "openkoudiosTests"
+        "name" : "YallaTests"
       }
     }
   ],

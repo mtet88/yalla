@@ -1,8 +1,8 @@
 import Foundation
 import Testing
-@testable import openkoudios
+@testable import Yalla
 
-struct openkoudiosTests {
+struct YallaTests {
 
     @Test func classifiesFoodIdeas() async throws {
         let result = IdeaClassifier.classify("Brunch en una cafeteria nueva el domingo")
@@ -134,11 +134,11 @@ struct openkoudiosTests {
         defaults.removeObject(forKey: "ideas:v1")
 
         let store = IdeaStore(defaults: defaults)
-        let saved = store.addIdea(rawText: "  Picnic en el parque cuando este soleado  ", link: "openkoud.com")
+        let saved = store.addIdea(rawText: "  Picnic en el parque cuando este soleado  ", link: "yalla.example")
         let reloaded = IdeaStore(defaults: defaults)
 
         #expect(saved.rawText == "Picnic en el parque cuando este soleado")
-        #expect(saved.link == "https://openkoud.com")
+        #expect(saved.link == "https://yalla.example")
         #expect(reloaded.ideas.count == 1)
         #expect(reloaded.ideas.first?.id == saved.id)
         #expect(reloaded.ideas.first?.category == .plans)
@@ -225,7 +225,7 @@ struct openkoudiosTests {
     }
 
     private func makeIsolatedDefaults() -> UserDefaults {
-        let suiteName = "openkoudiosTests.\(UUID().uuidString)"
+        let suiteName = "YallaTests.\(UUID().uuidString)"
         return UserDefaults(suiteName: suiteName)!
     }
 

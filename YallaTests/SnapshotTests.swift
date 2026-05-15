@@ -1,6 +1,6 @@
 import XCTest
 import SwiftUI
-@testable import openkoudios
+@testable import Yalla
 
 @MainActor
 final class SnapshotTests: XCTestCase {

@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  openkoudios
+//  Yalla
 //
 //  Created by Mauro ™ on 06.05.26.
 //

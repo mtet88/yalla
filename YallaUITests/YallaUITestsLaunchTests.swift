@@ -1,13 +1,13 @@
 //
-//  openkoudiosUITestsLaunchTests.swift
-//  openkoudiosUITests
+//  YallaUITestsLaunchTests.swift
+//  YallaUITests
 //
 //  Created by Mauro ™ on 06.05.26.
 //
 
 import XCTest
 
-final class openkoudiosUITestsLaunchTests: XCTestCase {
+final class YallaUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

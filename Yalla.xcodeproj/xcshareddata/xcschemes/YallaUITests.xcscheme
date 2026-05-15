@@ -20,9 +20,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8722A3C22FABDD12000B5CD9"
-               BuildableName = "openkoudiosUITests.xctest"
-               BlueprintName = "openkoudiosUITests"
-               ReferencedContainer = "container:openkoudios.xcodeproj">
+               BuildableName = "YallaUITests.xctest"
+               BlueprintName = "YallaUITests"
+               ReferencedContainer = "container:Yalla.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

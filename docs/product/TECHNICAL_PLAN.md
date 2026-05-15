@@ -95,8 +95,8 @@ Orden recomendado:
 ## Estructura de Proyecto Actual
 
 ```txt
-openkoudios/
-  openkoudiosApp.swift
+Yalla/
+  YallaApp.swift
   ContentView.swift
   Models/
     Idea.swift
@@ -118,8 +118,8 @@ openkoudios/
     AccountView.swift
     Components.swift
 
-openkoudiosTests/
-openkoudiosUITests/
+YallaTests/
+YallaUITests/
 ```
 
 ## Design System / Componentes Visuales
@@ -325,7 +325,7 @@ repeatable requiere 15 dias
 expiracion marca discarded sin borrar
 ```
 
-Cobertura unitaria actual en `openkoudiosTests/openkoudiosTests.swift`:
+Cobertura unitaria actual en `YallaTests/YallaTests.swift`:
 
 ```txt
 clasificacion basica e insensible a acentos
@@ -345,7 +345,7 @@ Snapshot tests actuales:
 Dispositivo estandar: iPhone 17 (402x874pt)
 Locales: es y en
 Temas: Light y Dark
-Referencias: openkoudiosTests/Snapshots/*_{es,en}_{Light,Dark}.png
+Referencias: YallaTests/Snapshots/*_{es,en}_{Light,Dark}.png
 Vistas cubiertas: VamosView, IdeasListView, SaveIdeaView, IdeaDetailView, AccountView
 ```
 
@@ -365,37 +365,37 @@ abrir detalle
 Abrir en Xcode:
 
 ```bash
-open openkoudios.xcodeproj
+open Yalla.xcodeproj
 ```
 
 Listar schemes/targets:
 
 ```bash
-xcodebuild -list -project openkoudios.xcodeproj
+xcodebuild -list -project Yalla.xcodeproj
 ```
 
 Build:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' build
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' build
 ```
 
 Tests:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' test
 ```
 
 Solo unit tests:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaTests test
 ```
 
 Solo UI tests:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaUITests test
 ```
 
 Si `xcodebuild` usa CommandLineTools, seleccionar Xcode completo:
@@ -418,7 +418,7 @@ The Simulator has intermittently failed in this environment with:
 
 ```txt
 NSMachErrorDomain Code=-308 "(ipc/mig) server died"
-Failed to launch app with identifier: matom.openkoudios
+Failed to launch app with identifier: matom.yalla
 ```
 
 This appears to be a Simulator launch/runtime issue rather than a documented product logic failure. `git diff --check` passes.

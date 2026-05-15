@@ -1,6 +1,6 @@
-# openkoudios
+# Yalla
 
-Native iOS SwiftUI port of `openkoud`: an app for saving ideas of plans and resurfacing them when it makes sense to do them.
+Native iOS SwiftUI port of `Yalla`: an app for saving ideas of plans and resurfacing them when it makes sense to do them.
 
 The product rule is simple: **Guardar primero, enriquecer despues**. Saving an idea should only require free text plus an optional link. Everything else can be completed later.
 
@@ -28,24 +28,24 @@ WIREFRAMES.md
 ## Project Structure
 
 ```txt
-openkoudios/
+Yalla/
   Models/       Core Idea model and enums
   Services/     Classification, scoring, expiration
   Stores/       UserDefaults-backed IdeaStore
   Views/        SwiftUI screens and shared components
 
-openkoudiosTests/      Swift Testing unit tests
-openkoudiosUITests/    XCTest/XCUITest UI tests
+YallaTests/      Swift Testing unit tests
+YallaUITests/    XCTest/XCUITest UI tests
 ```
 
-The SwiftUI entrypoint is `openkoudios/openkoudiosApp.swift`, which loads `ContentView`, which loads `AppRootView`.
+The SwiftUI entrypoint is `Yalla/YallaApp.swift`, which loads `ContentView`, which loads `AppRootView`.
 
 ### Snapshot Testing
 The application includes a visual testing system (Snapshot Tests) configured for **iPhone 17** (402x874pt).
 
 - **Locales:** Each covered view is verified in Spanish (`es`) and English (`en`).
 - **Modes:** Each locale is verified in both **Light Mode** and **Dark Mode**.
-- **References:** Reference images are stored in `openkoudiosTests/Snapshots/` with explicit names such as `IdeaDetailView_es_Light.png` and `IdeaDetailView_en_Dark.png`.
+- **References:** Reference images are stored in `YallaTests/Snapshots/` with explicit names such as `IdeaDetailView_es_Light.png` and `IdeaDetailView_en_Dark.png`.
 - **Regression:** If a view changes, the test will fail and attach a **Visual Diff** to the Xcode report highlighting the differences.
 - **Updating:** Missing references are recorded and fail the test for review. To overwrite existing references, temporarily set `recordMode = true` in `SnapshotTests.swift`.
 
@@ -54,37 +54,37 @@ The application includes a visual testing system (Snapshot Tests) configured for
 Open the project in Xcode:
 
 ```bash
-open openkoudios.xcodeproj
+open Yalla.xcodeproj
 ```
 
 List schemes and targets:
 
 ```bash
-xcodebuild -list -project openkoudios.xcodeproj
+xcodebuild -list -project Yalla.xcodeproj
 ```
 
 Build from CLI:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' build
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' build
 ```
 
 Run tests from CLI:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' test
 ```
 
 Run only unit tests:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaTests test
 ```
 
 Run only UI tests:
 
 ```bash
-xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test
+xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaUITests test
 ```
 
 If `xcodebuild` reports that the active developer directory is CommandLineTools, select a full Xcode install first:

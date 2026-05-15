@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8722A3AB2FABDD0F000B5CD9"
-               BuildableName = "openkoudios.app"
-               BlueprintName = "openkoudios"
-               ReferencedContainer = "container:openkoudios.xcodeproj">
+               BuildableName = "Yalla.app"
+               BlueprintName = "Yalla"
+               ReferencedContainer = "container:Yalla.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -37,19 +37,19 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8722A3B82FABDD12000B5CD9"
-               BuildableName = "openkoudiosTests.xctest"
-               BlueprintName = "openkoudiosTests"
-               ReferencedContainer = "container:openkoudios.xcodeproj">
+               BuildableName = "YallaTests.xctest"
+               BlueprintName = "YallaTests"
+               ReferencedContainer = "container:Yalla.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8722A3C22FABDD12000B5CD9"
-               BuildableName = "openkoudiosUITests.xctest"
-               BlueprintName = "openkoudiosUITests"
-               ReferencedContainer = "container:openkoudios.xcodeproj">
+               BuildableName = "YallaUITests.xctest"
+               BlueprintName = "YallaUITests"
+               ReferencedContainer = "container:Yalla.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8722A3AB2FABDD0F000B5CD9"
-            BuildableName = "openkoudios.app"
-            BlueprintName = "openkoudios"
-            ReferencedContainer = "container:openkoudios.xcodeproj">
+            BuildableName = "Yalla.app"
+            BlueprintName = "Yalla"
+            ReferencedContainer = "container:Yalla.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -87,9 +87,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8722A3AB2FABDD0F000B5CD9"
-            BuildableName = "openkoudios.app"
-            BlueprintName = "openkoudios"
-            ReferencedContainer = "container:openkoudios.xcodeproj">
+            BuildableName = "Yalla.app"
+            BlueprintName = "Yalla"
+            ReferencedContainer = "container:Yalla.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

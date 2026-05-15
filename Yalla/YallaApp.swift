@@ -1,6 +1,6 @@
 //
-//  openkoudiosApp.swift
-//  openkoudios
+//  YallaApp.swift
+//  Yalla
 //
 //  Created by Mauro ™ on 06.05.26.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct openkoudiosApp: App {
+struct YallaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

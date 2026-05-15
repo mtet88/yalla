@@ -1,16 +1,16 @@
 # AGENTS.md
 
 ## Project Shape
-- This is a single native Xcode iOS app project, not a Swift Package, JS repo, or Next.js app. Use `openkoudios.xcodeproj`; there is no `Package.swift`, package manager lockfile, CI config, formatter, or lint config in the repo.
+- This is a single native Xcode iOS app project, not a Swift Package, JS repo, or Next.js app. Use `Yalla.xcodeproj`; there is no `Package.swift`, package manager lockfile, CI config, formatter, or lint config in the repo.
 - Product docs are source-of-truth context and live in `docs/product/`: `PRODUCT_PLAN.md`, `MVP_SPEC.md`, `TECHNICAL_PLAN.md`, and `WIREFRAMES.md`.
-- Main app code is in `openkoudios/`; the SwiftUI entrypoint is `openkoudios/openkoudiosApp.swift`, which launches `ContentView`, which loads `AppRootView`.
-- The app is a native SwiftUI port of the `openkoud` product. Core domain code is split into `Models/`, `Services/`, `Stores/`, and `Views/` under `openkoudios/`.
-- Unit tests live in `openkoudiosTests/` and use Swift Testing (`import Testing`, `@Test`, `#expect`). UI tests live in `openkoudiosUITests/` and use XCTest/XCUITest.
+- Main app code is in `Yalla/`; the SwiftUI entrypoint is `Yalla/YallaApp.swift`, which launches `ContentView`, which loads `AppRootView`.
+- The app is a native SwiftUI port of the `Yalla` product. Core domain code is split into `Models/`, `Services/`, `Stores/`, and `Views/` under `Yalla/`.
+- Unit tests live in `YallaTests/` and use Swift Testing (`import Testing`, `@Test`, `#expect`). UI tests live in `YallaUITests/` and use XCTest/XCUITest.
 
 ## Xcode Project Gotchas
-- The `.xcodeproj` uses Xcode file-system-synchronized root groups for `openkoudios/`, `openkoudiosTests/`, and `openkoudiosUITests/`; adding Swift files under those folders should not require manually editing `project.pbxproj`.
+- The `.xcodeproj` uses Xcode file-system-synchronized root groups for `Yalla/`, `YallaTests/`, and `YallaUITests/`; adding Swift files under those folders should not require manually editing `project.pbxproj`.
 - Info.plist is generated from build settings (`GENERATE_INFOPLIST_FILE = YES`); do not look for or add a physical plist unless the project is intentionally changed.
-- App target settings include iPhone/iPad support (`TARGETED_DEVICE_FAMILY = 1,2`), bundle id `matom.openkoudios`, deployment target `IPHONEOS_DEPLOYMENT_TARGET = 26.4`, Swift version `5.0`, approachable concurrency, and default actor isolation `MainActor`.
+- App target settings include iPhone/iPad support (`TARGETED_DEVICE_FAMILY = 1,2`), bundle id `matom.yalla`, deployment target `IPHONEOS_DEPLOYMENT_TARGET = 26.4`, Swift version `5.0`, approachable concurrency, and default actor isolation `MainActor`.
 
 ## Product Direction
 - Product copy is Spanish and the home tab is `Vamos!`, not the ideas list.
@@ -47,19 +47,19 @@
 - Idea detail opens as a modal sheet from suggestion/list cards, not as a push. The modal owns its `NavigationStack` and has an explicit `X` close action.
 - Hide or avoid global navigation chrome during focused save/detail flows when it creates accidental exits or distraction. `SaveIdeaView` closes with `X`, not a `Cancelar` text button.
 - Use reusable design-system controls for repeated branded UI, especially the sheet `X` close button and primary full-width CTA buttons like `Guardar idea` / `Guardar cambios`.
-- **Snapshot Testing:** All main views must have a snapshot test. The standard device is iPhone 17 (402x874pt). It is mandatory to verify both themes (Light/Dark).
+- **Snapshot Testing:** Main views should have snapshot coverage where state can be isolated. The standard device is iPhone 17 (402x874pt). It is mandatory to verify both themes (Light/Dark) and both supported locales (`es`/`en`).
 - UI copy is Spanish. Existing source may include non-ASCII Spanish such as `Mañana`; otherwise prefer ASCII if editing nearby ASCII-only text.
 
 ## Commands
-- Open in Xcode: `open openkoudios.xcodeproj`.
-- List schemes/targets: `xcodebuild -list -project openkoudios.xcodeproj`.
-- Build from CLI: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' build`.
-- Run all tests from CLI: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' test`.
-- Run unit tests only: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosTests test`.
-- Run UI tests only: `xcodebuild -project openkoudios.xcodeproj -scheme openkoudios -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:openkoudiosUITests test`.
+- Open in Xcode: `open Yalla.xcodeproj`.
+- List schemes/targets: `xcodebuild -list -project Yalla.xcodeproj`.
+- Build from CLI: `xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' build`.
+- Run all tests from CLI: `xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' test`.
+- Run unit tests only: `xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaTests test`.
+- Run UI tests only: `xcodebuild -project Yalla.xcodeproj -scheme Yalla -destination 'platform=iOS Simulator,name=<installed simulator>' -only-testing:YallaUITests test`.
 - If `xcodebuild` reports the active developer directory is CommandLineTools, select a full Xcode install first, e.g. `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`.
 
 ## Current Verification State
 - Active developer directory is currently `/Applications/Xcode-26.4.1.app/Contents/Developer` and `xcodebuild -list` works.
-- Full tests and unit-only tests currently fail during Simulator launch with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"` after building far enough to attempt launching `matom.openkoudios`.
+- CLI build, unit tests, and bilingual snapshot tests have passed in the current environment. If Simulator launch intermittently fails with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"`, rerun after the simulator recovers before treating it as a product regression.
 - `git diff --check` passes for the current changes.

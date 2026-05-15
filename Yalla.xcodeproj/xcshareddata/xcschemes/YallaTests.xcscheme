@@ -14,7 +14,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:openkoudiosTests.xctestplan"
+            reference = "container:YallaTests.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -25,9 +25,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8722A3B82FABDD12000B5CD9"
-               BuildableName = "openkoudiosTests.xctest"
-               BlueprintName = "openkoudiosTests"
-               ReferencedContainer = "container:openkoudios.xcodeproj">
+               BuildableName = "YallaTests.xctest"
+               BlueprintName = "YallaTests"
+               ReferencedContainer = "container:Yalla.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
