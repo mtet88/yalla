@@ -54,10 +54,10 @@ struct EmptyStateView: View {
             Image(systemName: "plus.circle")
                 .font(.system(size: 48, weight: .bold))
                 .foregroundStyle(Color.yallaPrimary)
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
-            Text(bodyText)
+            Text(LocalizedStringKey(bodyText))
                 .font(.subheadline)
                 .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
@@ -84,6 +84,8 @@ struct IdeaCardView: View {
     let idea: Idea
     var delete: (() -> Void)?
 
+    @Environment(\.locale) private var locale
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .top) {
@@ -104,7 +106,7 @@ struct IdeaCardView: View {
                 .font(.headline.weight(.black))
                 .foregroundStyle(.primary)
 
-            if let summary = idea.dateSummary {
+            if let summary = idea.dateSummary(locale: locale) {
                 Label(summary, systemImage: "calendar")
                     .font(.caption)
                     .foregroundStyle(Color.secondaryText)
@@ -133,23 +135,33 @@ struct IdeaCardView: View {
 }
 
 extension Idea {
-    var dateSummary: String? {
+    func dateSummary(locale: Locale) -> String? {
         switch dateType {
         case .none:
-            nil
+            return nil
         case .single:
-            dateStart.map { $0.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()) } ?? "Fecha especifica sin definir"
+            return dateStart.map { formatDate($0, locale: locale) } ?? localized("Fecha especifica sin definir", locale: locale)
         case .range:
             if let dateStart, let dateEnd {
-                "\(dateStart.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year())) - \(dateEnd.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()))"
+                return "\(formatDate(dateStart, locale: locale)) - \(formatDate(dateEnd, locale: locale))"
             } else if let dateStart {
-                "Desde \(dateStart.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()))"
+                let formattedDate = formatDate(dateStart, locale: locale)
+                return "\(localized("Desde", locale: locale)) \(formattedDate)"
             } else if let dateEnd {
-                "Hasta \(dateEnd.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year()))"
+                let formattedDate = formatDate(dateEnd, locale: locale)
+                return "\(localized("Hasta", locale: locale)) \(formattedDate)"
             } else {
-                "Rango sin definir"
+                return localized("Rango sin definir", locale: locale)
             }
         }
+    }
+
+    private func localized(_ key: String.LocalizationValue, locale: Locale) -> String {
+        String(localized: key, locale: locale)
+    }
+
+    private func formatDate(_ date: Date, locale: Locale) -> String {
+        date.formatted(.dateTime.locale(locale).day().month().year())
     }
 }
 

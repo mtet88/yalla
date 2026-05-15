@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 enum IdeaCategory: String, Codable, CaseIterable, Identifiable {
     case food
@@ -9,7 +10,7 @@ enum IdeaCategory: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .food: "Comida"
         case .places: "Sitios"
@@ -38,7 +39,7 @@ enum IdeaStatus: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .pending: "Pendiente"
         case .done: "Hecha"
@@ -59,7 +60,7 @@ enum IdeaDateType: String, Codable, CaseIterable, Identifiable {
         allCases
     }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .none: "Sin fecha"
         case .single: "Fecha especifica"
@@ -85,7 +86,7 @@ enum IdealCondition: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .goodWeather: "Buen clima"
         case .indoor: "Indoor"
@@ -145,7 +146,7 @@ enum SuggestionMoment: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .today: "Hoy"
         case .tomorrow: "Mañana"
@@ -164,5 +165,53 @@ struct ScoredIdea: Identifiable {
     var id: String { idea.id }
     var idea: Idea
     var score: Int
-    var reasons: [String]
+    var reasons: [SuggestionReason]
+}
+
+enum SuggestionReason: Equatable {
+    case pendingOverThirtyDays
+    case repeatableReady
+    case weekendFit
+    case weatherFit
+    case event
+    case pendingList
+    case incompleteSingleDate
+    case matchingDate(Date)
+    case approachingDate(Date)
+    case incompleteRange
+    case withinRange
+    case startsSoon(Date)
+
+    func localizedString(locale: Locale) -> String {
+        switch self {
+        case .pendingOverThirtyDays:
+            String(localized: "Lleva mas de 30 dias pendiente.", locale: locale)
+        case .repeatableReady:
+            String(localized: "Es repetible y ya puede volver a sugerirse.", locale: locale)
+        case .weekendFit:
+            String(localized: "Encaja con planes de fin de semana.", locale: locale)
+        case .weatherFit:
+            String(localized: "Puede ser buen plan cuando el clima acompane.", locale: locale)
+        case .event:
+            String(localized: "Es un evento, conviene tenerlo presente.", locale: locale)
+        case .pendingList:
+            String(localized: "Esta en tu lista de ideas pendientes.", locale: locale)
+        case .incompleteSingleDate:
+            String(localized: "Tiene una fecha especifica por completar.", locale: locale)
+        case .matchingDate(let date):
+            "\(String(localized: "Cae en este momento", locale: locale)): \(formatDate(date, locale: locale))."
+        case .approachingDate(let date):
+            "\(String(localized: "Se acerca", locale: locale)): \(formatDate(date, locale: locale))."
+        case .incompleteRange:
+            String(localized: "Tiene un rango de fechas por completar.", locale: locale)
+        case .withinRange:
+            String(localized: "Esta dentro del rango de fechas.", locale: locale)
+        case .startsSoon(let date):
+            "\(String(localized: "Empieza pronto", locale: locale)): \(formatDate(date, locale: locale))."
+        }
+    }
+
+    private func formatDate(_ date: Date, locale: Locale) -> String {
+        date.formatted(.dateTime.locale(locale).day().month().year())
+    }
 }

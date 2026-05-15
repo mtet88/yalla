@@ -74,7 +74,7 @@ struct SaveIdeaView: View {
         let text = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard !text.isEmpty else {
-            error = "Escribe una idea para guardarla."
+            error = String(localized: "Escribe una idea para guardarla.")
             return
         }
 

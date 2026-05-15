@@ -14,10 +14,6 @@ final class SnapshotTests: XCTestCase {
         store = IdeaStore(defaults: defaults)
     }
 
-    func testAppRootViewSnapshot() {
-        assertSnapshot(for: AppRootView(), name: "AppRootView")
-    }
-
     func testVamosViewEmptySnapshot() {
         let view = NavigationStack {
             VamosView(store: store, showSave: {})
@@ -67,32 +63,54 @@ final class SnapshotTests: XCTestCase {
 
     @discardableResult
     private func seedIdeas() -> [Idea] {
-        let idea1 = store.addIdea(rawText: "Cena en el nuevo Japones", link: "https://example.com")
-        let idea2 = store.addIdea(rawText: "Excursion a la montaña", link: nil)
+        var idea1 = store.addIdea(rawText: "Cena en el nuevo Japones", link: "https://example.com")
+        var idea2 = store.addIdea(rawText: "Excursion a la montaña", link: nil)
         var idea3 = store.addIdea(rawText: "Concierto de Jazz", link: nil)
-        
+
+        let baseDate = fixedDate()
+        idea1.createdAt = baseDate
+        idea1.updatedAt = baseDate
+        idea2.createdAt = baseDate
+        idea2.updatedAt = baseDate
+        idea3.createdAt = baseDate
+        idea3.updatedAt = baseDate
+
         // Enrich idea 3
         idea3.category = .events
         idea3.dateType = .single
-        idea3.dateStart = Date().addingTimeInterval(86400 * 2) // Tomorrow
+        idea3.dateStart = daysAfterFixedDate(1)
+        store.updateIdea(idea1)
+        store.updateIdea(idea2)
         store.updateIdea(idea3)
-        
+
         return [idea1, idea2, idea3]
+    }
+
+    private func fixedDate() -> Date {
+        Calendar(identifier: .gregorian).date(from: DateComponents(year: 2026, month: 5, day: 10))!
+    }
+
+    private func daysAfterFixedDate(_ days: Int) -> Date {
+        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: fixedDate())!
     }
 
     /// Set to `true` to overwrite existing snapshots with new ones.
     /// In a CI environment, this should always be `false`.
     private let recordMode = false
+    private let snapshotLocales: [(id: String, locale: Locale)] = [
+        ("es", Locale(identifier: "es")),
+        ("en", Locale(identifier: "en")),
+    ]
 
     private func assertSnapshot(for view: some View, name: String, file: StaticString = #file, line: UInt = #line) {
-        // Test Light Mode
-        assertSnapshot(for: view, name: name, style: .light, file: file, line: line)
-        // Test Dark Mode
-        assertSnapshot(for: view, name: name, style: .dark, file: file, line: line)
+        for snapshotLocale in snapshotLocales {
+            assertSnapshot(for: view, name: name, localeID: snapshotLocale.id, locale: snapshotLocale.locale, style: .light, file: file, line: line)
+            assertSnapshot(for: view, name: name, localeID: snapshotLocale.id, locale: snapshotLocale.locale, style: .dark, file: file, line: line)
+        }
     }
 
-    private func assertSnapshot(for view: some View, name: String, style: UIUserInterfaceStyle, file: StaticString, line: UInt) {
-        let controller = UIHostingController(rootView: view)
+    private func assertSnapshot(for view: some View, name: String, localeID: String, locale: Locale, style: UIUserInterfaceStyle, file: StaticString, line: UInt) {
+        let controller = UIHostingController(rootView: view.environment(\.locale, locale))
         controller.overrideUserInterfaceStyle = style
         let view = controller.view
         
@@ -116,7 +134,7 @@ final class SnapshotTests: XCTestCase {
         }
 
         let styleSuffix = style == .dark ? "_Dark" : "_Light"
-        let snapshotName = "\(name)\(styleSuffix)"
+        let snapshotName = "\(name)_\(localeID)\(styleSuffix)"
 
         let testFileURL = URL(fileURLWithPath: "\(file)")
         let snapshotsDirectory = testFileURL

@@ -99,10 +99,13 @@ enum IdeaFilter: Hashable, CaseIterable, Identifiable {
         }
     }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .all: "Todas"
-        case .status(let status): status == .pending ? "Pendientes" : status.label + "s"
+        case .status(.pending): "Pendientes"
+        case .status(.repeatable): "Repetibles"
+        case .status(.done): "Hechas"
+        case .status(.discarded): "Descartadas"
         case .category(let category): category.label
         }
     }

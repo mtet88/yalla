@@ -1,11 +1,11 @@
 import Foundation
 
 enum IdeaScoring {
-    static func suggestions(from ideas: [Idea], context: SuggestionContext = SuggestionContext()) -> [ScoredIdea] {
+    static func suggestions(from ideas: [Idea], context: SuggestionContext = SuggestionContext(), locale: Locale = .current) -> [ScoredIdea] {
         ideas.compactMap { idea in
             guard canSuggest(idea) else { return nil }
 
-            var reasons: [String] = []
+            var reasons: [SuggestionReason] = []
             var score = 10
             let age = daysBetween(idea.createdAt)
             let dateFit = getDateFit(idea: idea, context: context)
@@ -14,7 +14,7 @@ enum IdeaScoring {
 
             score += dateFit.score
 
-            if let reason = dateFit.reason, !reason.isEmpty {
+            if let reason = dateFit.reason {
                 reasons.append(reason)
             }
 
@@ -24,31 +24,31 @@ enum IdeaScoring {
 
             if age > 30 {
                 score += 15
-                reasons.append("Lleva mas de 30 dias pendiente.")
+                reasons.append(.pendingOverThirtyDays)
             }
 
             if idea.status == .repeatable {
                 score += 10
-                reasons.append("Es repetible y ya puede volver a sugerirse.")
+                reasons.append(.repeatableReady)
             }
 
             if context.moment == .weekend && idea.idealConditions.contains(.weekend) {
                 score += 14
-                reasons.append("Encaja con planes de fin de semana.")
+                reasons.append(.weekendFit)
             }
 
             if idea.idealConditions.contains(.goodWeather) || idea.idealConditions.contains(.outdoor) {
                 score += 8
-                reasons.append("Puede ser buen plan cuando el clima acompane.")
+                reasons.append(.weatherFit)
             }
 
             if idea.category == .events {
                 score += 8
-                reasons.append("Es un evento, conviene tenerlo presente.")
+                reasons.append(.event)
             }
 
             if reasons.isEmpty {
-                reasons.append("Esta en tu lista de ideas pendientes.")
+                reasons.append(.pendingList)
             }
 
             return ScoredIdea(idea: idea, score: score, reasons: reasons)
@@ -78,7 +78,7 @@ enum IdeaScoring {
         return true
     }
 
-    private static func getDateFit(idea: Idea, context: SuggestionContext) -> (applies: Bool, score: Int, reason: String?) {
+    private static func getDateFit(idea: Idea, context: SuggestionContext) -> (applies: Bool, score: Int, reason: SuggestionReason?) {
         let target = targetRange(for: context)
         let allowsNearFuture = context.moment == .weekend
         let allowsFallback = idea.dateType == .none
@@ -86,36 +86,36 @@ enum IdeaScoring {
         switch idea.dateType {
         case .single:
             guard let date = idea.dateStart else {
-                return (true, 0, "Tiene una fecha especifica por completar.")
+                return (true, 0, .incompleteSingleDate)
             }
 
             if overlaps(start: date, end: date, targetStart: target.start, targetEnd: target.end) {
-                return (true, 35, "Cae en este momento: \(formatDate(date)).")
+                return (true, 35, .matchingDate(date))
             }
 
             guard allowsNearFuture else { return (false, 0, nil) }
 
             let daysAway = Calendar.current.dateComponents([.day], from: target.end, to: startOfDay(date)).day ?? 0
             if daysAway >= 0 && daysAway <= 7 {
-                return (true, 12, "Se acerca: \(formatDate(date)).")
+                return (true, 12, .approachingDate(date))
             }
 
             return (false, 0, nil)
         case .range:
             guard let start = idea.dateStart else {
-                return (true, 0, "Tiene un rango de fechas por completar.")
+                return (true, 0, .incompleteRange)
             }
 
             let end = idea.dateEnd ?? start
             if overlaps(start: start, end: end, targetStart: target.start, targetEnd: target.end) {
-                return (true, 32, "Esta dentro del rango de fechas.")
+                return (true, 32, .withinRange)
             }
 
             guard allowsNearFuture else { return (false, 0, nil) }
 
             let daysAway = Calendar.current.dateComponents([.day], from: target.end, to: startOfDay(start)).day ?? 0
             if daysAway >= 0 && daysAway <= 7 {
-                return (true, 10, "Empieza pronto: \(formatDate(start)).")
+                return (true, 10, .startsSoon(start))
             }
 
             return (false, 0, nil)
@@ -164,7 +164,4 @@ enum IdeaScoring {
         Calendar.current.date(byAdding: .day, value: days, to: startOfDay(date)) ?? date
     }
 
-    private static func formatDate(_ date: Date) -> String {
-        date.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year())
-    }
 }

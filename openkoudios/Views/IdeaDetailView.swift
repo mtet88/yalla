@@ -6,6 +6,7 @@ struct IdeaDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
+    @Environment(\.locale) private var locale
     @State private var isEditing = false
     @State private var draft: IdeaDraft?
     @State private var showingDelete = false
@@ -104,8 +105,17 @@ struct IdeaDetailView: View {
                     }
                 }
 
-                DetailRow(label: "Fecha", value: idea.dateSummary ?? "Sin fecha")
-                DetailRow(label: "Ubicacion", value: idea.locationName?.isEmpty == false ? idea.locationName! : "Sin ubicacion todavia")
+                if let dateSummary = idea.dateSummary(locale: locale) {
+                    DetailRow(label: "Fecha", value: dateSummary)
+                } else {
+                    DetailRow(label: "Fecha", localizedValue: "Sin fecha")
+                }
+
+                if let locationName = idea.locationName, !locationName.isEmpty {
+                    DetailRow(label: "Ubicacion", value: locationName)
+                } else {
+                    DetailRow(label: "Ubicacion", localizedValue: "Sin ubicacion todavia")
+                }
 
                 DetailRow(label: "Condiciones ideales") {
                     if idea.idealConditions.isEmpty {
@@ -123,13 +133,25 @@ struct IdeaDetailView: View {
                     }
                 }
 
-                DetailRow(label: "Notas", value: idea.notes?.isEmpty == false ? idea.notes! : "Sin notas todavia")
+                if let notes = idea.notes, !notes.isEmpty {
+                    DetailRow(label: "Notas", value: notes)
+                } else {
+                    DetailRow(label: "Notas", localizedValue: "Sin notas todavia")
+                }
 
                 VStack(alignment: .leading, spacing: 12) {
                     DetailRow(label: "Creada", value: formatDate(idea.createdAt))
                     DetailRow(label: "Ultima actualizacion", value: formatDate(idea.updatedAt))
-                    DetailRow(label: "Ultima vez sugerida", value: idea.lastSuggestedAt.map(formatDate) ?? "Todavia no")
-                    DetailRow(label: "Hecha", value: idea.completedAt.map(formatDate) ?? "Todavia no")
+                    if let lastSuggestedAt = idea.lastSuggestedAt {
+                        DetailRow(label: "Ultima vez sugerida", value: formatDate(lastSuggestedAt))
+                    } else {
+                        DetailRow(label: "Ultima vez sugerida", localizedValue: "Todavia no")
+                    }
+                    if let completedAt = idea.completedAt {
+                        DetailRow(label: "Hecha", value: formatDate(completedAt))
+                    } else {
+                        DetailRow(label: "Hecha", localizedValue: "Todavia no")
+                    }
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -149,8 +171,9 @@ struct IdeaDetailView: View {
                     }
                 }
 
-                Text(idea.status.label.uppercased())
+                Text(idea.status.label)
                     .font(.caption.weight(.black))
+                    .textCase(.uppercase)
                     .tracking(2)
                     .foregroundStyle(statusColor(idea.status))
             }
@@ -396,7 +419,7 @@ struct IdeaDetailView: View {
     }
 
     private func formatDate(_ date: Date) -> String {
-        date.formatted(.dateTime.locale(Locale(identifier: "es")).day().month().year())
+        date.formatted(.dateTime.locale(locale).day().month().year())
     }
 
     private func formatCompactDate(_ date: Date) -> String {
@@ -552,10 +575,10 @@ private struct DateRangePickerSheet: View {
 }
 
 private struct DetailRow<Content: View>: View {
-    let label: String
+    let label: LocalizedStringKey
     let content: Content
 
-    init(label: String, @ViewBuilder content: () -> Content) {
+    init(label: LocalizedStringKey, @ViewBuilder content: () -> Content) {
         self.label = label
         self.content = content()
     }
@@ -572,9 +595,14 @@ private struct DetailRow<Content: View>: View {
 }
 
 private extension DetailRow where Content == Text {
-    init(label: String, value: String) {
+    init(label: LocalizedStringKey, value: String) {
         self.label = label
         self.content = Text(value)
+    }
+
+    init(label: LocalizedStringKey, localizedValue: LocalizedStringKey) {
+        self.label = label
+        self.content = Text(localizedValue)
     }
 }
 

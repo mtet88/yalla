@@ -1,9 +1,13 @@
 import SwiftUI
 
 struct AppRootView: View {
-    @State private var store = IdeaStore()
+    @State private var store: IdeaStore
     @State private var selectedTab: AppTab = .vamos
     @State private var showingSave = false
+
+    init(store: IdeaStore = IdeaStore()) {
+        _store = State(initialValue: store)
+    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {

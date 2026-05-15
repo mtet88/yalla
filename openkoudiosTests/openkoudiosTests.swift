@@ -19,6 +19,30 @@ struct openkoudiosTests {
         #expect(result.idealConditions.contains(.cheap))
     }
 
+    @Test func classifiesEnglishFoodIdeas() async throws {
+        let result = IdeaClassifier.classify("Cheap dinner at a restaurant on Sunday")
+
+        #expect(result.category == .food)
+        #expect(result.idealConditions.contains(.cheap))
+        #expect(result.idealConditions.contains(.weekend))
+    }
+
+    @Test func classifiesEnglishOutdoorPlans() async throws {
+        let result = IdeaClassifier.classify("Picnic in the park if it is sunny")
+
+        #expect(result.category == .plans)
+        #expect(result.idealConditions.contains(.goodWeather))
+        #expect(result.idealConditions.contains(.outdoor))
+    }
+
+    @Test func classifiesMixedLanguageIdeas() async throws {
+        let result = IdeaClassifier.classify("Coffee en casa")
+
+        #expect(result.category == .food)
+        #expect(result.idealConditions.contains(.day))
+        #expect(result.idealConditions.contains(.indoor))
+    }
+
     @Test func normalizeOptionalLinkTrimsAndAddsScheme() async throws {
         #expect(normalizeOptionalLink("  example.com/plan ") == "https://example.com/plan")
         #expect(normalizeOptionalLink("http://example.com") == "http://example.com")
@@ -54,7 +78,7 @@ struct openkoudiosTests {
         let suggestions = IdeaScoring.suggestions(from: [recent, old])
 
         #expect(suggestions.map(\.idea.id) == ["old"])
-        #expect(suggestions.first?.reasons.contains("Es repetible y ya puede volver a sugerirse.") == true)
+        #expect(suggestions.first?.reasons.contains(.repeatableReady) == true)
     }
 
     @Test func suggestionsReturnAtMostFiveIdeas() async throws {
@@ -76,7 +100,7 @@ struct openkoudiosTests {
         let suggestions = IdeaScoring.suggestions(from: [matching, other], context: context)
 
         #expect(suggestions.map(\.idea.id) == ["matching"])
-        #expect(suggestions.first?.reasons.first?.contains("Cae en este momento") == true)
+        #expect(suggestions.first?.reasons.first == .matchingDate(targetDate))
     }
 
     @Test func expirationDiscardsPastSingleDateWithoutDeleting() async throws {
@@ -117,7 +141,7 @@ struct openkoudiosTests {
         #expect(saved.link == "https://openkoud.com")
         #expect(reloaded.ideas.count == 1)
         #expect(reloaded.ideas.first?.id == saved.id)
-        #expect(reloaded.ideas.first?.category == .places)
+        #expect(reloaded.ideas.first?.category == .plans)
 
         defaults.removeObject(forKey: "ideas:v1")
     }

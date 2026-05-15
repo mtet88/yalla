@@ -34,7 +34,7 @@ struct PrimaryCTAButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.headline.weight(.black))
                 .frame(maxWidth: .infinity)
                 .padding()

@@ -7,9 +7,10 @@ struct VamosView: View {
     @State private var selectedMoment: SuggestionMoment = .today
     @State private var selectedDate = Date()
     @State private var presentedIdea: PresentedIdea?
+    @Environment(\.locale) private var locale
 
     private var suggestions: [ScoredIdea] {
-        IdeaScoring.suggestions(from: store.ideas, context: SuggestionContext(moment: selectedMoment, targetDate: selectedDate))
+        IdeaScoring.suggestions(from: store.ideas, context: SuggestionContext(moment: selectedMoment, targetDate: selectedDate), locale: locale)
     }
 
     var body: some View {
@@ -112,6 +113,8 @@ private struct MomentPicker: View {
 private struct SuggestionCard: View {
     let suggestion: ScoredIdea
 
+    @Environment(\.locale) private var locale
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .center) {
@@ -123,7 +126,7 @@ private struct SuggestionCard: View {
                     HStack {
                         CategoryBadge(category: suggestion.idea.category)
                         Spacer()
-                        ShareLink(item: "Hacemos esto?\n\(suggestion.idea.title)\n\(suggestion.reasons.first ?? "")") {
+                        ShareLink(item: "\(String(localized: "Hacemos esto?", locale: locale))\n\(suggestion.idea.title)\n\(suggestion.reasons.first?.localizedString(locale: locale) ?? "")") {
                             Image(systemName: "square.and.arrow.up")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(.primary)
@@ -142,7 +145,7 @@ private struct SuggestionCard: View {
                     .font(.title2.weight(.bold))
                     .foregroundStyle(.primary)
                     .lineLimit(3)
-                Text(suggestion.reasons.first ?? "Esta en tu lista de ideas pendientes.")
+                SuggestionReasonText(reason: suggestion.reasons.first ?? .pendingList, locale: locale)
                     .font(.subheadline)
                     .foregroundStyle(Color.secondaryText)
                     .multilineTextAlignment(.leading)
@@ -164,6 +167,32 @@ private struct SuggestionCard: View {
         case .events: [.purple.opacity(0.45), .cyan.opacity(0.25), .cardBackground]
         case .plans: [.green.opacity(0.45), .yellow.opacity(0.25), .cardBackground]
         case .other: [.gray.opacity(0.35), .cyan.opacity(0.2), .cardBackground]
+        }
+    }
+}
+
+private struct SuggestionReasonText: View {
+    let reason: SuggestionReason
+    let locale: Locale
+
+    var body: some View {
+        switch reason {
+        case .pendingOverThirtyDays:
+            Text("Lleva mas de 30 dias pendiente.")
+        case .repeatableReady:
+            Text("Es repetible y ya puede volver a sugerirse.")
+        case .weekendFit:
+            Text("Encaja con planes de fin de semana.")
+        case .weatherFit:
+            Text("Puede ser buen plan cuando el clima acompane.")
+        case .event:
+            Text("Es un evento, conviene tenerlo presente.")
+        case .pendingList:
+            Text("Esta en tu lista de ideas pendientes.")
+        case .incompleteSingleDate:
+            Text("Tiene una fecha especifica por completar.")
+        case .matchingDate, .approachingDate, .incompleteRange, .withinRange, .startsSoon:
+            Text(reason.localizedString(locale: locale))
         }
     }
 }
