@@ -13,6 +13,7 @@ SwiftUI
 Observation
 Foundation
 UserDefaults para modo local inicial
+String Catalog (`Localizable.xcstrings`) para localizacion es/en
 Swift Testing para unit tests
 XCTest/XCUITest para UI tests
 Xcode project nativo
@@ -99,6 +100,7 @@ openkoudios/
   ContentView.swift
   Models/
     Idea.swift
+  Localizable.xcstrings
   Services/
     IdeaClassifier.swift
     IdeaExpiration.swift
@@ -211,7 +213,7 @@ struct Idea: Identifiable, Codable, Hashable {
 
 ## Labels de UI
 
-El codigo puede usar enums en ingles, pero la UI V1 debe mostrar labels en espanol.
+El codigo puede usar enums en ingles, pero los labels visibles deben resolverse mediante localizacion. El idioma fuente del producto sigue siendo espanol y la app soporta renderizado en espanol (`es`) e ingles (`en`) desde `Localizable.xcstrings`.
 
 ```txt
 food -> Comida
@@ -224,6 +226,15 @@ pending -> Pendiente
 done -> Hecha
 repeatable -> Repetible
 discarded -> Descartada
+```
+
+Reglas:
+
+```txt
+Mantener raw values/enums estables en ingles para datos persistidos.
+Usar LocalizedStringKey para labels visibles cuando sea posible.
+Evitar resolver texto visible a String antes de llegar a SwiftUI salvo cuando sea necesario para share/dinamicos.
+Los fallbacks de detalle y razones de sugerencia deben tener traducciones completas en es/en.
 ```
 
 ## Persistencia Local
@@ -269,6 +280,8 @@ idealConditions
 
 La clasificacion es una ayuda inicial, no una decision definitiva. El usuario debe poder cambiar los campos.
 
+La clasificacion actual usa keywords en espanol e ingles con scoring determinista. No debe depender solo del idioma del sistema y no debe bloquear la creacion si no puede clasificar con confianza.
+
 ## Scoring Local
 
 `IdeaScoring` debe retornar hasta 5 sugerencias.
@@ -285,6 +298,8 @@ Priorizar pendientes antiguas.
 Agregar razones legibles.
 Ordenar deterministicamente por score y fecha de creacion.
 ```
+
+Las razones internas se modelan como `SuggestionReason` para separar logica de presentacion. La UI y el texto compartido localizan esas razones segun el locale activo.
 
 ## Expiracion
 
@@ -323,6 +338,18 @@ expiracion descarta sin borrar
 IdeaStore persiste y recarga con UserDefaults aislado
 IdeaStore marca descartes manuales
 ```
+
+Snapshot tests actuales:
+
+```txt
+Dispositivo estandar: iPhone 17 (402x874pt)
+Locales: es y en
+Temas: Light y Dark
+Referencias: openkoudiosTests/Snapshots/*_{es,en}_{Light,Dark}.png
+Vistas cubiertas: VamosView, IdeasListView, SaveIdeaView, IdeaDetailView, AccountView
+```
+
+`AppRootView` no se usa como referencia estable de snapshot porque puede depender del estado real/persistido de la app y del contenedor de simulador. Las vistas principales se prueban directamente con stores aislados y datos deterministas.
 
 UI tests deben cubrir flujos criticos:
 
@@ -385,7 +412,9 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 /Applications/Xcode-26.4.1.app/Contents/Developer
 ```
 
-Full tests and unit-only tests currently build far enough to start launching the simulator app, but fail during Simulator launch with:
+Recent local verification has passed for CLI build, unit tests, and bilingual snapshot tests. The snapshot suite records missing references and then passes once the generated references are reviewed.
+
+The Simulator has intermittently failed in this environment with:
 
 ```txt
 NSMachErrorDomain Code=-308 "(ipc/mig) server died"
@@ -393,3 +422,4 @@ Failed to launch app with identifier: matom.openkoudios
 ```
 
 This appears to be a Simulator launch/runtime issue rather than a documented product logic failure. `git diff --check` passes.
+When it appears, rerun after the simulator recovers before treating it as a product regression.

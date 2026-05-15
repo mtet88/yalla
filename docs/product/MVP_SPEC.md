@@ -31,6 +31,7 @@ Fechas editables: sin fecha, especifica, rango
 Persistencia local en UserDefaults bajo ideas:v1
 Sugerencias por scoring simple y explicable
 Compartir idea o sugerencia usando ShareLink/share sheet nativa
+UI localizada en espanol e ingles
 ```
 
 Planificado despues del core local:
@@ -71,6 +72,18 @@ Guardar idea
 En iOS, `Vamos!`, `Ideas` y `Cuenta` viven en `TabView`. `Guardar idea` vive como accion global `+` flotante, visible en `Vamos!` e `Ideas`, y se presenta como sheet enfocada.
 
 En flujos enfocados como `Guardar idea` y detalle de idea, se debe minimizar la navegacion global para evitar distracciones o salidas accidentales. Ambos flujos deben tener un cierre explicito con `X`.
+
+## Idiomas
+
+La copy fuente del producto es espanol. La V1 debe poder renderizar la interfaz en espanol e ingles usando el locale activo del sistema o del entorno de tests.
+
+Reglas:
+
+```txt
+No traducir datos del usuario como titulo, notas, ubicacion o links.
+Localizar labels de dominio, estados, filtros, fallbacks y razones de sugerencia.
+Mantener los identificadores internos y datos persistidos estables en ingles cuando ya existan como raw values.
+```
 
 ## Pantalla: Vamos!
 

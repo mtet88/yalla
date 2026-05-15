@@ -43,10 +43,11 @@ The SwiftUI entrypoint is `openkoudios/openkoudiosApp.swift`, which loads `Conte
 ### Snapshot Testing
 The application includes a visual testing system (Snapshot Tests) configured for **iPhone 17** (402x874pt).
 
-- **Modes:** Each test automatically verifies both **Light Mode** and **Dark Mode**.
-- **References:** Reference images are stored in `openkoudiosTests/Snapshots/`.
+- **Locales:** Each covered view is verified in Spanish (`es`) and English (`en`).
+- **Modes:** Each locale is verified in both **Light Mode** and **Dark Mode**.
+- **References:** Reference images are stored in `openkoudiosTests/Snapshots/` with explicit names such as `IdeaDetailView_es_Light.png` and `IdeaDetailView_en_Dark.png`.
 - **Regression:** If a view changes, the test will fail and attach a **Visual Diff** to the Xcode report highlighting the differences.
-- **Updating:** To update reference images, temporarily set `recordMode = true` in `SnapshotTests.swift`.
+- **Updating:** Missing references are recorded and fail the test for review. To overwrite existing references, temporarily set `recordMode = true` in `SnapshotTests.swift`.
 
 ## Development
 
@@ -98,4 +99,4 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 - The `.xcodeproj` uses file-system-synchronized root groups, so adding Swift files under the target folders should not require manually editing `project.pbxproj`.
 - Info.plist is generated from build settings.
 - Current local Xcode path is `/Applications/Xcode-26.4.1.app/Contents/Developer`.
-- `xcodebuild -list` works. Full and unit-only test commands currently fail during Simulator app launch with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"`, after building far enough to attempt launch.
+- `xcodebuild -list`, CLI build, unit tests, and bilingual snapshot tests have passed in the current environment. If the Simulator intermittently fails with `NSMachErrorDomain Code=-308 "(ipc/mig) server died"`, treat it as a Simulator launch/runtime issue and rerun after the simulator recovers.
